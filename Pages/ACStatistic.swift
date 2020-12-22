@@ -149,6 +149,7 @@ struct ACStatistic: View {
                             Text("查询").font(.headline).foregroundColor(.white)
                         }.background(Rectangle().fill(Color.blue))
                     }
+                    
                     PieCharts(data: $chartData7, description: "充电功率")
                 }.frame(height : 210)
                 .sheet(isPresented: $showPilePicker,onDismiss:{
@@ -160,7 +161,7 @@ struct ACStatistic: View {
                 //用户的图表
                 VStack {
                     HStack(spacing : 0) {
-                        Text("调峰储能")
+                        Text("用户")
                         Spacer()
                         TextField("年/季/月/日", text: $userDateText).frame(width : 100)
                             .background(Rectangle().stroke(Color.blue))
@@ -241,7 +242,7 @@ struct ACStatistic: View {
                     }
                     var secondList = [ChartDataEntry]()
                     let secondYData = json["Y2"].arrayValue
-                    for index in 0 ..< firstYData.count {
+                    for index in 0 ..< secondYData.count {
                         secondList.append(ChartDataEntry(x: Double(index), y: Double(secondYData[index].stringValue)!))
                     }
                     let secondSet = LineChartDataSet(entries: secondList,label: "B段母线功率曲线")
@@ -299,7 +300,7 @@ struct ACStatistic: View {
                     for index in 0 ..< fifthYData.count {
                         fifthList.append(ChartDataEntry(x: Double(index), y: Double(fifthYData[index].stringValue)!))
                     }
-                    let fifthSet = LineChartDataSet(entries: fifthList,label: "储能充放电量")
+                    let fifthSet = LineChartDataSet(entries: fifthList,label: "储能充放电功率")
                     fifthSet.setColor(UIColor.blue)
                     fifthSet.valueTextColor = UIColor.blue
                     fifthSet.circleRadius = 1
@@ -314,16 +315,26 @@ struct ACStatistic: View {
                         x6Data.append(sixthData[item].stringValue)
                     }
                     var sixthList = [ChartDataEntry]()
+                    var sixth2List = [ChartDataEntry]()
                     let sixthYData = json["Y6"].arrayValue
+                    let sixth2YData = json["Y62"].arrayValue
                     for index in 0 ..< sixthYData.count {
-                        sixthList.append(ChartDataEntry(x: Double(index), y: Double(sixthYData[index].stringValue)!))
+                        sixthList.append(ChartDataEntry(x: Double(index), y: Double(sixthYData[index].intValue)))
+                        sixth2List.append(ChartDataEntry(x: Double(index), y: Double(sixth2YData[index].intValue)))
                     }
-                    let sixthSet = LineChartDataSet(entries: sixthList,label: "储能充放电量")
+                    let sixthSet = LineChartDataSet(entries: sixthList,label: "储能放电电量")
+                    let sixth2Set = LineChartDataSet(entries: sixth2List,label: "储能放电电量")
+                    
                     sixthSet.setColor(UIColor.blue)
                     sixthSet.valueTextColor = UIColor.blue
                     sixthSet.circleRadius = 1
                     sixthSet.circleHoleRadius = 0
-                    chartData6 = LineChartData(dataSet: sixthSet)
+                    sixth2Set.setColor(UIColor.cyan)
+                    sixth2Set.valueTextColor = UIColor.cyan
+                    sixth2Set.circleRadius = 1
+                    sixth2Set.circleHoleRadius = 0
+                    
+                    chartData6 = LineChartData(dataSets: [sixthSet,sixth2Set])
                     chartX6 = x6Data
                     //刷新第七个图表
                     var pieData = [PieChartDataEntry]()

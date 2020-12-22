@@ -104,7 +104,7 @@ struct DCStatistic: View {
                 //储能的图表
                 VStack {
                     HStack(spacing : 0) {
-                        Text("调峰储能")
+                        Text("储能")
                         Spacer()
                         TextField("年/季/月/日", text: $storageDateText).frame(width : 100)
                             .background(Rectangle().stroke(Color.blue))
@@ -132,7 +132,7 @@ struct DCStatistic: View {
                 //用户的图表
                 VStack {
                     HStack(spacing : 0) {
-                        Text("调峰储能")
+                        Text("用户")
                         Spacer()
                         TextField("年/季/月/日", text: $userDateText).frame(width : 100)
                             .background(Rectangle().stroke(Color.blue))

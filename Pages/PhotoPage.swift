@@ -52,8 +52,8 @@ struct PhotoPage: View {
                                                   streamB: "B相：\(deviceInfo["bI"])A",
                                                   streamC: "C相：\(deviceInfo["cI"])A",
                                                   power: "总有功功率：\(deviceInfo["P"])w",
-                                                  produceToday: "日发电量：\(deviceInfo["EToday"])kwh",
-                                                  producetotally: "总发电量：\(deviceInfo["EMonth"])kwh",
+                                                  produceToday: "日发电量：\(deviceInfo["EToday"])kWh",
+                                                  producetotally: "总发电量：\(deviceInfo["EMonth"])kWh",
                                                   operatingHours: "工作状态：正在运行 运行时间：：\(deviceInfo["time"])h"))
                         }
                     }catch{

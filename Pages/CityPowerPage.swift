@@ -110,18 +110,18 @@ struct CityPowerPage: View {
                     if let data = response.data{
                         do{
                             let json = try JSON(data: data)
-                            peakDayA = "峰时段电量：\(json["aFengDay"].doubleValue)kwh"
-                            normalDayA = "平时段电量：\(json["aPingDay"].doubleValue)kwh"
-                            valleyDayA = "谷时段电量：\(json["aGuDay"].doubleValue)kwh"
-                            peakDayB = "峰时段电量：\(json["bFengDay"].doubleValue)kwh"
-                            normalDayB = "平时段电量：\(json["bPingDay"].doubleValue)kwh"
-                            valleyDayB = "谷时段电量：\(json["bGuDay"].doubleValue)kwh"
-                            peakMonthA = "峰时段电量：\(json["aFengMonth"].doubleValue)kwh"
-                            normalMonthA = "平时段电量：\(json["aPingMonth"].doubleValue)kwh"
-                            valleyMonthA = "谷时段电量：\(json["aGuMonth"].doubleValue)kwh"
-                            peakMonthB = "峰时段电量：\(json["bFengMonth"].doubleValue)kwh"
-                            normalMonthB = "平时段电量：\(json["bPingMonth"].doubleValue)kwh"
-                            valleyMonthB = "谷时段电量：\(json["bGuMonth"].doubleValue)kwh"
+                            peakDayA = "峰时段电量：\(json["aFengDay"].doubleValue)kWh"
+                            normalDayA = "平时段电量：\(json["aPingDay"].doubleValue)kWh"
+                            valleyDayA = "谷时段电量：\(json["aGuDay"].doubleValue)kWh"
+                            peakDayB = "峰时段电量：\(json["bFengDay"].doubleValue)kWh"
+                            normalDayB = "平时段电量：\(json["bPingDay"].doubleValue)kWh"
+                            valleyDayB = "谷时段电量：\(json["bGuDay"].doubleValue)kWh"
+                            peakMonthA = "峰时段电量：\(json["aFengMonth"].doubleValue)kWh"
+                            normalMonthA = "平时段电量：\(json["aPingMonth"].doubleValue)kWh"
+                            valleyMonthA = "谷时段电量：\(json["aGuMonth"].doubleValue)kWh"
+                            peakMonthB = "峰时段电量：\(json["bFengMonth"].doubleValue)kWh"
+                            normalMonthB = "平时段电量：\(json["bPingMonth"].doubleValue)kWh"
+                            valleyMonthB = "谷时段电量：\(json["bGuMonth"].doubleValue)kWh"
                         }catch{
                             debugPrint("转换json数据发生错误")
                         }

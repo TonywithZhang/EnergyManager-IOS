@@ -181,19 +181,19 @@ struct DCWatch: View {
                     let json = try JSON(data : data)
                     acU = "电压：\(formatFloat(d: json["acU"].doubleValue))V"
                     acI = "电流：\(formatFloat(d: json["acI"].doubleValue))A"
-                    acP = "功率：\(formatFloat(d: json["acP"].doubleValue))kw"
-                    acE = "电量：\(formatFloat(d: json["acEp"].doubleValue))kwh"
-                    photoP = "实时功率：\(json["photoP"].doubleValue)kw"
-                    photoTodayE = "当日累计发电量：\(formatFloat(d: json["todayEp"].doubleValue))kwh"
-                    photoTotalE = "历史累计发电量：\(formatFloat(d: json["photoEp"].doubleValue))kwh"
+                    acP = "功率：\(formatFloat(d: json["acP"].doubleValue))kW"
+                    acE = "电量：\(formatFloat(d: json["acEp"].doubleValue))kWh"
+                    photoP = "实时功率：\(json["photoP"].doubleValue)kW"
+                    photoTodayE = "当日累计发电量：\(formatFloat(d: json["todayEp"].doubleValue))kWh"
+                    photoTotalE = "历史累计发电量：\(formatFloat(d: json["photoEp"].doubleValue))kWh"
                     photoTime = "累计发电小时数：\(json["RunTime"].intValue)h"
                     storageU = "电压：\(json["storeU"].doubleValue)V"
                     storageI = "电流：\(json["storeI"].doubleValue)A"
-                    storageP = "功率：\(json["storeP"].doubleValue)kw"
+                    storageP = "功率：\(json["storeP"].doubleValue)kW"
                     userU = "电压：\(json["userU"].doubleValue)V"
                     userI = "电流：\(json["userI"].doubleValue)A"
-                    userP = "功率：\(json["userP"].doubleValue)kw"
-                    userE = "电量：\(formatFloat(d: json["photoEp"].doubleValue))kwh"
+                    userP = "功率：\(json["userP"].doubleValue)W"
+                    userE = "电量：\(formatFloat(d: json["photoEp"].doubleValue))kWh"
                 }catch{
                     debugPrint("解析json数据发生错误")
                 }

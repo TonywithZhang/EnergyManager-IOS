@@ -35,6 +35,6 @@ struct UserBean: View {
 
 struct UserBean_Previews: PreviewProvider {
     static var previews: some View {
-        UserBean(user: UserData(name: "D46", type: "商业配套", volta: "230v", stream: "123A", power: "12314w", cost: "12312kwh"))
+        UserBean(user: UserData(name: "D46", type: "商业配套", volta: "230v", stream: "123A", power: "12314w", cost: "12312kWh"))
     }
 }

@@ -32,7 +32,7 @@ struct DeviceInstruction: View {
 
 struct DeviceInstruction_Previews: PreviewProvider {
     static var previews: some View {
-        DeviceInstruction(device: Device(deviceName: "逆变器1", voltaA: "A相：221.0V", voltaB: "B相：220V", voltaC: "C相：223V", streamA: "A相：34A", streamB: "B相：45A", streamC: "C相：34A", power: "总有功功率：34344w", produceToday: "日发电量：1293kwh", producetotally: "总发电量：20394kwh", operatingHours: "正在运行 运行时间：12343h"))
+        DeviceInstruction(device: Device(deviceName: "逆变器1", voltaA: "A相：221.0V", voltaB: "B相：220V", voltaC: "C相：223V", streamA: "A相：34A", streamB: "B相：45A", streamC: "C相：34A", power: "总有功功率：34344w", produceToday: "日发电量：1293kWh", producetotally: "总发电量：20394kWh", operatingHours: "正在运行 运行时间：12343h"))
     }
 }
 

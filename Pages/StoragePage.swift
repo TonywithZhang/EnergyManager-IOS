@@ -74,12 +74,12 @@ struct StoragePage: View {
                 if let data = response.data{
                     do{
                         let json = try JSON(data : data)
-                        dayP = "峰时段电量：\(json["PeakDayBattery"].doubleValue)kwh"
-                        dayN = "平时段电量：\(json["OrdinaryDayBattery"].doubleValue)kwh"
-                        dayV = "谷时段电量：\(json["ValleyDayBattery"].doubleValue)kwh"
-                        monthP = "峰时段电量：\(json["PeakDayTotalBattery"].doubleValue)kwh"
-                        monthN = "平时段电量：\(json["OrdinaryDayTotalBattery"].doubleValue)kwh"
-                        monthV = "谷时段电量：\(json["ValleyDayTotalBattery"].doubleValue)kwh"
+                        dayP = "峰时段电量：\(json["PeakDayBattery"].doubleValue)kWh"
+                        dayN = "平时段电量：\(json["OrdinaryDayBattery"].doubleValue)kWh"
+                        dayV = "谷时段电量：\(json["ValleyDayBattery"].doubleValue)kWh"
+                        monthP = "峰时段电量：\(json["PeakDayTotalBattery"].doubleValue)kWh"
+                        monthN = "平时段电量：\(json["OrdinaryDayTotalBattery"].doubleValue)kWh"
+                        monthV = "谷时段电量：\(json["ValleyDayTotalBattery"].doubleValue)kWh"
                     }catch{
                         debugPrint("调峰储能界面转换json数据发生错误")
                     }

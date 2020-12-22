@@ -227,25 +227,25 @@ struct ACWatch: View {
                         //更新市电界面的内容
                         self.cityPowerAU = "电压：\(json["V"].doubleValue)V"
                         self.cityPowerAI = "电流：\(String(format: "%.2f", json["aI"].doubleValue * 400))A"
-                        self.cityPowerAP = "实时功率：\(json["aP"].doubleValue)kw"
-                        self.cityPowerAE = "有功总电能：\(json["aE"].doubleValue)kwh"
+                        self.cityPowerAP = "实时功率：\(json["aP"].doubleValue)kW"
+                        self.cityPowerAE = "有功总电能：\(json["aE"].doubleValue)kWh"
                         self.cityPowerBU = "电压：\(json["bV"].doubleValue)V"
                         self.cityPowerBI = "电流：\(String(format: "%.2f", json["bI"].doubleValue * 400))A"
-                        self.cityPowerBP = "实时功率：\(json["bP"].doubleValue)kw"
-                        self.cityPowerBE = "有功总电能：\(json["bE"].doubleValue)kwh"
+                        self.cityPowerBP = "实时功率：\(json["bP"].doubleValue)kW"
+                        self.cityPowerBE = "有功总电能：\(json["bE"].doubleValue)kWh"
                         //更新光伏界面的内容
-                        self.photoPower = "实时功率：\(json["totalPower"].doubleValue)kw"
-                        self.photoTodayEnergy = "当日累计发电量：\(json["todayEnergy"].doubleValue)kwh"
-                        self.photoTotalEnergy = "历史累计发电量：\(json["totalEnergy"].doubleValue)kwh"
+                        self.photoPower = "实时功率：\(json["totalPower"].doubleValue)kW"
+                        self.photoTodayEnergy = "当日累计发电量：\(json["todayEnergy"].doubleValue)kWh"
+                        self.photoTotalEnergy = "历史累计发电量：\(json["totalEnergy"].doubleValue)kWh"
                         self.photoTime = "累计发电小时数：\(json["totalTime"].doubleValue)h"
                         //更新调峰储能界面的内容
                         self.storageU = "电压：\(json["storageU"].doubleValue)V"
                         self.storageI = "电流：\(json["storageI"].doubleValue)A"
-                        self.storagePower = "有功功率：\(String(format: "%.2f", json["storageP"].doubleValue))kw"
+                        self.storagePower = "有功功率：\(String(format: "%.2f", json["storageP"].doubleValue))kW"
                         self.storageState = json["storageP"].doubleValue > 0 ? "充放电状态：充电" : "充放电状态：放电"
                         //更新小镇用户界面的内容
-                        self.userP = "总功率：\(json["userP"].doubleValue)kw"
-                        self.userE = "总电量：\(json["userE"].doubleValue)kwh"
+                        self.userP = "总功率：\(json["userP"].doubleValue)kW"
+                        self.userE = "总电量：\(json["userE"].doubleValue)kWh"
                     }catch{
                         debugPrint("发生错误")
                     }

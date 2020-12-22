@@ -11,12 +11,40 @@ import Alamofire
 import SwiftyJSON
 
 struct ACAlarm: View {
-    @State private var startTime = Date()
-    @State private var showStartTimePicker = false
-    @State private var startTimeText = "起始时间"
-    @State private var endTime = Date()
-    @State private var showEndTimePicker = false
-    @State private var endTimeText = "截止时间"
+    @State private var startTime1 = Date()
+    @State private var showStartTimePicker1 = false
+    @State private var startTimeText1 = "起始时间"
+    @State private var endTime1 = Date()
+    @State private var showEndTimePicker1 = false
+    @State private var endTimeText1 = "截止时间"
+    
+    @State private var startTime2 = Date()
+    @State private var showStartTimePicker2 = false
+    @State private var startTimeText2 = "起始时间"
+    @State private var endTime2 = Date()
+    @State private var showEndTimePicker2 = false
+    @State private var endTimeText2 = "截止时间"
+    
+    @State private var startTime3 = Date()
+    @State private var showStartTimePicker3 = false
+    @State private var startTimeText3 = "起始时间"
+    @State private var endTime3 = Date()
+    @State private var showEndTimePicker3 = false
+    @State private var endTimeText3 = "截止时间"
+    
+    @State private var startTime4 = Date()
+    @State private var showStartTimePicker4 = false
+    @State private var startTimeText4 = "起始时间"
+    @State private var endTime4 = Date()
+    @State private var showEndTimePicker4 = false
+    @State private var endTimeText4 = "截止时间"
+    
+    @State private var startTime5 = Date()
+    @State private var showStartTimePicker5 = false
+    @State private var startTimeText5 = "起始时间"
+    @State private var endTime5 = Date()
+    @State private var showEndTimePicker5 = false
+    @State private var endTimeText5 = "截止时间"
     
     @State private var cityData = [AlarmInformation]()
     @State private var photoData = [AlarmInformation]()
@@ -33,31 +61,31 @@ struct ACAlarm: View {
                         HStack(spacing : 0) {
                             Text("市电")
                             Spacer()
-                            TextField("起始时间", text: $startTimeText).frame(width : 100)
+                            TextField("起始时间", text: $startTimeText1).frame(width : 100)
                                 .background(Rectangle().stroke(Color.blue))
                                 .font(.subheadline)
                                 .onTapGesture(count: 1, perform: {
-                                    self.showStartTimePicker.toggle()
+                                    self.showStartTimePicker1.toggle()
                                 })
-                                .sheet(isPresented: $showStartTimePicker,onDismiss:{
-                                    self.startTimeText = "\(startTime.year)-\(startTime.month)-\(startTime.day)"
+                                .sheet(isPresented: $showStartTimePicker1,onDismiss:{
+                                    self.startTimeText1 = "\(startTime1.year)-\(startTime1.month)-\(startTime1.day)"
                                 }, content: {
-                                    startTimePicker
+                                    startTimePicker1
                                 })
                             Divider()
-                            TextField("截止时间", text: $endTimeText).frame(width : 100)
+                            TextField("截止时间", text: $endTimeText1).frame(width : 100)
                                 .background(Rectangle().stroke(Color.blue))
                                 .font(.subheadline)
                                 .onTapGesture(count: 1, perform: {
-                                    self.showEndTimePicker.toggle()
+                                    self.showEndTimePicker1.toggle()
                                 })
-                                .sheet(isPresented: $showEndTimePicker,onDismiss:{
-                                    self.endTimeText = "\(endTime.year)-\(endTime.month)-\(endTime.day)"
+                                .sheet(isPresented: $showEndTimePicker1,onDismiss:{
+                                    self.endTimeText1 = "\(endTime1.year)-\(endTime1.month)-\(endTime1.day)"
                                 }, content: {
-                                    endTimePicker
+                                    endTimePicker1
                                 })
                             Button(action : {
-                                getData()
+                                getData(index: 1, startTime: startTimeText1, endTime: endTimeText1)
                             }){
                                 Text("查询").font(.headline).foregroundColor(.white)
                             }.background(Rectangle().fill(Color.blue))
@@ -73,6 +101,34 @@ struct ACAlarm: View {
                         HStack(spacing : 0) {
                             Text("光伏")
                             Spacer()
+                            TextField("起始时间", text: $startTimeText2).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showStartTimePicker2.toggle()
+                                })
+                                .sheet(isPresented: $showStartTimePicker2,onDismiss:{
+                                    self.startTimeText2 = "\(startTime2.year)-\(startTime2.month)-\(startTime2.day)"
+                                }, content: {
+                                    startTimePicker2
+                                })
+                            Divider()
+                            TextField("截止时间", text: $endTimeText2).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showEndTimePicker2.toggle()
+                                })
+                                .sheet(isPresented: $showEndTimePicker2,onDismiss:{
+                                    self.endTimeText2 = "\(endTime2.year)-\(endTime2.month)-\(endTime2.day)"
+                                }, content: {
+                                    endTimePicker2
+                                })
+                            Button(action : {
+                                getData(index: 2, startTime: startTimeText2, endTime: endTimeText2)
+                            }){
+                                Text("查询").font(.headline).foregroundColor(.white)
+                            }.background(Rectangle().fill(Color.blue))
                         }
                         AlarmTable(data: $photoData)
                             .frame(minHeight : 200,maxHeight: 250)
@@ -83,6 +139,34 @@ struct ACAlarm: View {
                         HStack(spacing : 0) {
                             Text("调峰储能")
                             Spacer()
+                            TextField("起始时间", text: $startTimeText3).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showStartTimePicker3.toggle()
+                                })
+                                .sheet(isPresented: $showStartTimePicker3,onDismiss:{
+                                    self.startTimeText3 = "\(startTime3.year)-\(startTime3.month)-\(startTime3.day)"
+                                }, content: {
+                                    startTimePicker3
+                                })
+                            Divider()
+                            TextField("截止时间", text: $endTimeText3).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showEndTimePicker3.toggle()
+                                })
+                                .sheet(isPresented: $showEndTimePicker3,onDismiss:{
+                                    self.endTimeText3 = "\(endTime3.year)-\(endTime3.month)-\(endTime3.day)"
+                                }, content: {
+                                    endTimePicker3
+                                })
+                            Button(action : {
+                                getData(index: 3, startTime: startTimeText3, endTime: endTimeText3)
+                            }){
+                                Text("查询").font(.headline).foregroundColor(.white)
+                            }.background(Rectangle().fill(Color.blue))
                         }
                         AlarmTable(data: $storageData)
                             .frame(minHeight : 200,maxHeight: 250)
@@ -93,9 +177,37 @@ struct ACAlarm: View {
                         HStack(spacing : 0) {
                             Text("充电桩")
                             Spacer()
+                            TextField("起始时间", text: $startTimeText4).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showStartTimePicker4.toggle()
+                                })
+                                .sheet(isPresented: $showStartTimePicker4,onDismiss:{
+                                    self.startTimeText4 = "\(startTime4.year)-\(startTime4.month)-\(startTime4.day)"
+                                }, content: {
+                                    startTimePicker4
+                                })
+                            Divider()
+                            TextField("截止时间", text: $endTimeText4).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showEndTimePicker4.toggle()
+                                })
+                                .sheet(isPresented: $showEndTimePicker4,onDismiss:{
+                                    self.endTimeText4 = "\(endTime4.year)-\(endTime4.month)-\(endTime4.day)"
+                                }, content: {
+                                    endTimePicker4
+                                })
+                            Button(action : {
+                                getData(index: 4, startTime: startTimeText4, endTime: endTimeText4)
+                            }){
+                                Text("查询").font(.headline).foregroundColor(.white)
+                            }.background(Rectangle().fill(Color.blue))
                         }
                         AlarmTable(data: $pileData)
-                            .frame(minHeight : 100,maxHeight: 210)
+                            .frame(minHeight : 200,maxHeight: 250)
                     }
                     Color.gray.frame(height : 2)
                     //用户信息
@@ -103,6 +215,34 @@ struct ACAlarm: View {
                         HStack(spacing : 0) {
                             Text("用户")
                             Spacer()
+                            TextField("起始时间", text: $startTimeText5).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showStartTimePicker5.toggle()
+                                })
+                                .sheet(isPresented: $showStartTimePicker5,onDismiss:{
+                                    self.startTimeText5 = "\(startTime5.year)-\(startTime5.month)-\(startTime5.day)"
+                                }, content: {
+                                    startTimePicker5
+                                })
+                            Divider()
+                            TextField("截止时间", text: $endTimeText5).frame(width : 100)
+                                .background(Rectangle().stroke(Color.blue))
+                                .font(.subheadline)
+                                .onTapGesture(count: 1, perform: {
+                                    self.showEndTimePicker5.toggle()
+                                })
+                                .sheet(isPresented: $showEndTimePicker5,onDismiss:{
+                                    self.endTimeText5 = "\(endTime5.year)-\(endTime5.month)-\(endTime5.day)"
+                                }, content: {
+                                    endTimePicker5
+                                })
+                            Button(action : {
+                                getData(index: 5, startTime: startTimeText5, endTime: endTimeText5)
+                            }){
+                                Text("查询").font(.headline).foregroundColor(.white)
+                            }.background(Rectangle().fill(Color.blue))
                         }
                         AlarmTable(data: $userData)
                             .frame(minHeight : 200,maxHeight: 250)
@@ -111,28 +251,80 @@ struct ACAlarm: View {
             }
         }
     }
-    private var startTimePicker : some View{
+    private var startTimePicker1 : some View{
         Form {
-            DatePicker("请选择一个日期", selection: $startTime,displayedComponents:.date)
+            DatePicker("请选择一个日期", selection: $startTime1,displayedComponents:.date)
                 .labelsHidden()
         }
     }
-    private var endTimePicker : some View{
+    private var endTimePicker1 : some View{
         Form {
-            DatePicker("请选择一个日期", selection: $endTime,displayedComponents:.date)
+            DatePicker("请选择一个日期", selection: $endTime1,displayedComponents:.date)
                 .labelsHidden()
         }
     }
-    private func getData(){
+    private var startTimePicker2 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $startTime2,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    private var endTimePicker2 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $endTime2,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    
+    private var startTimePicker3 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $startTime3,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    private var endTimePicker3 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $endTime3,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    
+    private var startTimePicker4 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $startTime4,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    private var endTimePicker4 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $endTime4,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    
+    private var startTimePicker5 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $startTime5,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    private var endTimePicker5 : some View{
+        Form {
+            DatePicker("请选择一个日期", selection: $endTime5,displayedComponents:.date)
+                .labelsHidden()
+        }
+    }
+    
+    private func getData(index : Int,startTime : String,endTime : String){
         let cookie = UserDefaults.standard.string(forKey: "Cookie")!
         var header = HTTPHeaders()
         header.add(name: "Cookie", value: cookie)
         let request = AF.request("http://101.132.236.192:8008/SysManage/Alarm/GetList",
                                  method : .post, parameters: [
-                                    "StartDate" : "\(startTimeText) 00:00:00",
-                                    "EndDate" : "\(endTimeText) 00:00:00",
+                                    "StartDate" : "\(startTime) 00:00:00",
+                                    "EndDate" : "\(endTime) 00:00:00",
                                     "page" : "1",
-                                    "limit" : "10"
+                                    "limit" : "15"
                                  ], headers: header)
         request.responseJSON{
             response in
@@ -171,11 +363,26 @@ struct ACAlarm: View {
                         }
                         
                     }
-                    cityData = cityList
-                    photoData = photoList
-                    storageData = storageList
-                    pileData = pileList
-                    userData = userList
+                    switch index {
+                    case 1:
+                        cityData = cityList
+                        break
+                    case 2:
+                        photoData = photoList
+                        break
+                    case 3:
+                        storageData = storageList
+                        break
+                    case 4:
+                        pileData = pileList
+                        break
+                    case 5:
+                        userData = userList
+                        break
+                    default:
+                        return
+                    }
+
                     debugPrint(cityData.count)
                     debugPrint(photoData.count)
                     debugPrint(storageData.count)
