@@ -66,8 +66,15 @@ struct ACStatistic: View {
                         }.background(Rectangle().fill(Color.blue))
                     }
                     HStack{
-                        LineCharts(lineData: $chartData1, xData: $chartX1, description: "A段母线功率曲线")
-                        LineCharts(lineData: $chartData2, xData: $chartX2, description: "A段母线功率曲线")
+                        NavigationLink(
+                            destination: ACSTatisticOne(data: chartData1, xData: chartX1, description: "A段母线功率曲线")
+                            ){
+                            LineCharts(lineData: $chartData1, xData: $chartX1, description: "A段母线功率曲线")
+                        }
+                        NavigationLink(destination : ACSTatisticOne(data: chartData2, xData: chartX2, description: "A段母线功率曲线")){
+                            LineCharts(lineData: $chartData2, xData: $chartX2, description: "A段母线功率曲线")
+                        }
+                        
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showCityPicker,onDismiss:{
@@ -77,7 +84,7 @@ struct ACStatistic: View {
                 })
                 Color.gray.frame(height : 2)
                 //光伏图表
-                VStack {
+                VStack {	
                     HStack(spacing : 0) {
                         Text("光伏")
                         Spacer()
@@ -94,8 +101,17 @@ struct ACStatistic: View {
                         }.background(Rectangle().fill(Color.blue))
                     }
                     HStack{
-                        BarCharts(barData: $chartData3, xData: $chartX3, description: "光伏发电量")
-                        BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
+                        NavigationLink(
+                            destination: ACStatisticTwo(barData: chartData3, xData: chartX3, description: "光伏发电量"),
+                            label: {
+                                BarCharts(barData: $chartData3, xData: $chartX3, description: "光伏发电量")
+                            })
+                        NavigationLink(
+                            destination: ACStatisticTwo(barData: chartData4, xData: chartX4, description: "光伏发电小时数"),
+                            label: {
+                                BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
+                            })
+                        
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showPhotoPicker,onDismiss:{
@@ -122,9 +138,19 @@ struct ACStatistic: View {
                         }.background(Rectangle().fill(Color.blue))
                     }
                     HStack{
-                        LineCharts(lineData: $chartData5, xData: $chartX5, description: "储能充放电量")
-                        LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
-                    }
+                        NavigationLink(
+                            destination: ACSTatisticOne(data: chartData5, xData: chartX5, description: "储能充放电量"),
+                            label: {
+                                LineCharts(lineData: $chartData5, xData: $chartX5, description: "储能充放电量")
+                            })
+                        
+                        NavigationLink(
+                            destination: ACSTatisticOne(data: chartData6, xData: chartX6, description: "SOC"),
+                            label: {
+                                LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
+                            })
+                        
+                    }		
                 }.frame(height : 210)
                 .sheet(isPresented: $showStoragePicker,onDismiss:{
                     self.storageDateText = "\(storageDate.year)-\(storageDate.month)-\(storageDate.day)"
@@ -176,8 +202,17 @@ struct ACStatistic: View {
                         }.background(Rectangle().fill(Color.blue))
                     }
                     HStack{
-                        LineCharts(lineData: $chartData8, xData: $chartX8, description: "用户用电量")
-                        BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电功率")
+                        NavigationLink(
+                            destination: ACSTatisticOne(data: chartData8, xData: chartX8, description: "用户用电量"),
+                            label: {
+                                LineCharts(lineData: $chartData8, xData: $chartX8, description: "用户用电量")
+                            })
+                        NavigationLink(
+                            destination: ACStatisticTwo(barData: chartData9, xData: chartX9, description: "用户用电功率"),
+                            label: {
+                                BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电功率")
+                            })
+                        
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showUserPicker,onDismiss:{
