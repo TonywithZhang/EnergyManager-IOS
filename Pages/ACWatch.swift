@@ -45,23 +45,30 @@ struct ACWatch: View {
                         //名称和图标
                         VStack {
                             Text("市电")
-                            Spacer()
                             Image("ic_tower")
                                 .resizable()
                                 .scaledToFit()
+                            Spacer()
                         }.frame(width : size.width * 0.15)
-                        .padding()
                         //A段母线界面
                         VStack(alignment : .leading) {
                             Text("A段母线").frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerAU)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerAI)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerAP)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerAE)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                         }.frame(width : size.width * 0.35)
                         //B段母线界面
@@ -69,15 +76,23 @@ struct ACWatch: View {
                             Text("B段母线").frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerBU)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerBI)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerBP)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                             Text(cityPowerBE)
+                                .font(.system(size: 12))
+                                .frame(maxWidth : .infinity)
                             Spacer()
                         }.frame(width : size.width * 0.35)
-                    }.frame(width: size.width, height: 210, alignment: .center)
+                    }.frame(width: size.width, height: 135, alignment: .center)
                     
                 }
                 .navigationBarHidden(true)
@@ -90,27 +105,31 @@ struct ACWatch: View {
                         //名称和图标
                         VStack {
                             Text("光伏")
-                            Spacer()
+                            
                             Image("ic_photo")
                                 .resizable()
                                 .scaledToFit()
+                            Spacer()
                         }.frame(width : size.width * 0.15)
                         .padding()
                         //光伏界面具体内容
                         VStack(alignment : .leading) {
-                            Text("").frame(maxWidth : .infinity)
                             Spacer()
                             Text(photoPower)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(photoTodayEnergy)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(photoTotalEnergy)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(photoTime)
+                                .font(.system(size: 12))
                             Spacer()
-                        }
+                        }.frame(maxWidth : .infinity)
                         
-                    }.frame(width: size.width, height: 210, alignment: .center)
+                    }.frame(width: size.width, height: 150, alignment: .center)
                 }
                 .buttonStyle(PlainButtonStyle())
                 //分割线
@@ -121,26 +140,29 @@ struct ACWatch: View {
                         //名称和图标
                         VStack {
                             Text("调峰储能")
-                            Spacer()
                             Image("ic_storage")
                                 .resizable()
                                 .scaledToFit()
-                        }.frame(width : size.width * 0.15)
+                            Spacer()
+                        }.frame(width : size.width * 0.20)
                         .padding()
                         //调峰储能界面具体内容
                         VStack(alignment : .leading) {
-                            Text("").frame(maxWidth : .infinity)
                             Spacer()
                             Text(storageU)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(storageI)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(storagePower)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(storageState)
+                                .font(.system(size: 12))
                             Spacer()
-                        }
-                    }.frame(width: size.width, height: 210, alignment: .center)
+                        }.frame(maxWidth : .infinity)
+                    }.frame(width: size.width, height: 135, alignment: .center)
                 }.buttonStyle(PlainButtonStyle())
                 //分割线
                 Text("").frame(width: size.width, height: 2, alignment: .center).background(Color.black)
@@ -158,17 +180,18 @@ struct ACWatch: View {
                         .padding()
                         //充电桩界面具体内容
                         VStack(alignment : .leading) {
-                            Text("").frame(maxWidth : .infinity)
                             Spacer()
                             Text("电压：")
+                                .font(.system(size: 12))
                             Spacer()
                             Text("电流：")
+                                .font(.system(size: 12))
                             Spacer()
                             Text("有功功率：")
+                                .font(.system(size: 12))
                             Spacer()
-                            
-                        }
-                    }.frame(width: size.width, height: 210, alignment: .center)
+                        }.frame(maxWidth : .infinity)
+                    }.frame(width: size.width, height: 135, alignment: .center)
                 }.buttonStyle(PlainButtonStyle())
                 //分割线
                 Text("").frame(width: size.width, height: 2, alignment: .center).background(Color.black)
@@ -178,37 +201,37 @@ struct ACWatch: View {
                         //名称和图标
                         VStack {
                             Text("小镇用电")
-                            Spacer()
+                            
                             Image("ic_user")
                                 .resizable()
                                 .scaledToFit()
-                        }.frame(width : size.width * 0.15)
+                            Spacer()
+                        }.frame(width : size.width * 0.20)
                         .padding()
                         //充电桩界面具体内容
                         VStack(alignment : .leading) {
-                            Text("").frame(maxWidth : .infinity)
                             Spacer()
                             Text(userP)
+                                .font(.system(size: 12))
                             Spacer()
                             Text(userE)
+                                .font(.system(size: 12))
                             Spacer()
-                            
-                        }
-                    }.frame(width: size.width, height: 210, alignment: .center)
+                        }.frame(maxWidth : .infinity)
+                    }.frame(width: size.width, height: 130, alignment: .center)
                 }.buttonStyle(PlainButtonStyle())
             }.frame(width: size.width)
-            .onAppear{
-                let network = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: {
-                    _ in
-                    refreshUI()
-                })
-                network.tolerance = 6
-                network.fire()
-        }
+//            .onAppear{
+//                let network = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: {
+//                    _ in
+//                    refreshUI()
+//                })
+//                network.tolerance = 6
+//                network.fire()
+//            }
         }
     }
     private func refreshUI(){
-        debugPrint("实时监控-交流检测进行一次网络请求")
         let cookie = dataBase.string(forKey: "Cookie")!
         var headers = HTTPHeaders()
         headers.add(name: "Cookie", value: cookie)

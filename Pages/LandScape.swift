@@ -198,7 +198,6 @@ struct LandScape: View {
                 do{
                     let json = try JSON(data : data)
                     //解析第一个饼图的数据
-                    debugPrint("正在初始化第一个饼图数据")
                     var pieData = [PieChartDataEntry]()
                     pieData.append(PieChartDataEntry(value: json["CityPower"].doubleValue, label: "市电"))
                     pieData.append(PieChartDataEntry(value: json["PhotovoltaicRoof"].doubleValue, label: "瓦片光伏"))
@@ -219,8 +218,6 @@ struct LandScape: View {
                     firstData.setValueTextColor(UIColor.blue)
                     firstPieChartData = firstData
                     //解析第二个饼图的数据
-                    debugPrint("正在初始化第二个饼图数据")
-                    debugPrint(json["Used"].doubleValue)
                     let secondPieEntry = [
                         PieChartDataEntry(value: json["Used"].doubleValue, label: "已使用"),
                         PieChartDataEntry(value: json["Unused"].doubleValue, label: "未使用")
@@ -317,7 +314,6 @@ struct LandScape: View {
                     return
                 }
                 do{
-                    debugPrint(data)
                     let json = try JSON(data : data)
                     //初始化第一个折线图
                     var x1Data = [String]()
@@ -358,12 +354,11 @@ struct LandScape: View {
                     storageChartData = LineChartData(dataSet: secondSet)
                     storageChartXData = x2Data
                     //更新节省的费用信息
-                    
                     photoSaveDay = "\(json["todayPSave"].intValue)元"
                     storageSaveDay = "\(json["todaySSave"].intValue)元"
                     photoSaveMonth = "\(json["monthPSave"].intValue)元"
                     storageSaveMonth = "\(json["monthSSave"].intValue)元"
-                    photoSaveYear = "\(Int(json["yearPSave"].doubleValue * 0.83))元"
+                    photoSaveYear = "\(json["yearPSave"].doubleValue)元"
                     storageSaveYear = "\(json["yearSSave"].intValue)元"
                 }catch{
                     debugPrint("转换json时发生错误")
