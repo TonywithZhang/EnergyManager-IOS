@@ -40,16 +40,15 @@ struct DCWatch: View {
                     //名称和图标
                     VStack {
                         Text("交流接口")
-                        Spacer()
                         Image(systemName: "personalhotspot")
                             .resizable()
                             .scaledToFit()
                             .foregroundColor(Color(red: 0x99 / 255.0, green: 0xc8 / 255.0, blue: 0x7a / 255.0))
+                        Spacer()
                     }.frame(width : size.width * 0.15)
                     .padding()
                     //具体数据
                     VStack(alignment : .leading) {
-                        Text("").frame(maxWidth : .infinity)
                         Spacer()
                         Text(acU)
                         Spacer()
@@ -59,22 +58,24 @@ struct DCWatch: View {
                         Spacer()
                         Text(acE)
                         Spacer()
-                    }.frame(width : size.width * 0.75)
+                    }.frame(maxWidth : .infinity)
                 }.frame(width: size.width, height: 180, alignment: .center)
+                //分割线
+                Text("").frame(width: size.width, height: 2, alignment: .center).background(Color.black)
                 //直流光伏
                 HStack(alignment : .top) {
                     //名称和图标
                     VStack {
                         Text("直流光伏")
-                        Spacer()
+                        
                         Image("photo_dc")
                             .resizable()
                             .scaledToFit()
+                        Spacer()
                     }.frame(width : size.width * 0.15)
                     .padding()
                     //具体数据
                     VStack(alignment : .leading) {
-                        Text("").frame(maxWidth : .infinity)
                         Spacer()
                         Text(photoP)
                         Spacer()
@@ -84,23 +85,25 @@ struct DCWatch: View {
                         Spacer()
                         Text(photoTime)
                         Spacer()
-                    }.frame(width : size.width * 0.75)
+                    }.frame(maxWidth : .infinity)
                 }.frame(width: size.width, height: 180, alignment: .center)
+                //分割线
+                Text("").frame(width: size.width, height: 2, alignment: .center).background(Color.black)
                 //储能
                 HStack(alignment : .top) {
                     //名称和图标
                     VStack {
                         Text("储能")
-                        Spacer()
+                        
                         Image(systemName: "bolt.fill.batteryblock")
                             .resizable()
                             .scaledToFit()
                             .foregroundColor(Color(red: 0x99 / 255.0, green: 0xc8 / 255.0, blue: 0x7a / 255.0))
+                        Spacer()
                     }.frame(width : size.width * 0.15)
                     .padding()
                     //具体数据
                     VStack(alignment : .leading) {
-                        Text("").frame(maxWidth : .infinity)
                         Group{
                             Spacer()
                             Text(storageU)
@@ -122,23 +125,24 @@ struct DCWatch: View {
                             Text("soc：")
                             Spacer()
                         }
-                    }.frame(width : size.width * 0.75)
-                }.frame(width: size.width, height: 180, alignment: .center)
+                    }.frame(maxWidth : .infinity)
+                }.frame(width: size.width, height: 200, alignment: .center)
+                //分割线
+                Text("").frame(width: size.width, height: 2, alignment: .center).background(Color.black)
                 //用户
                 HStack(alignment : .top) {
                     //名称和图标
                     VStack {
                         Text("用户")
-                        Spacer()
                         Image(systemName: "person.3")
                             .resizable()
                             .scaledToFit()
                             .foregroundColor(Color(red: 0x99 / 255.0, green: 0xc8 / 255.0, blue: 0x7a / 255.0))
+                        Spacer()
                     }.frame(width : size.width * 0.15)
                     .padding()
                     //具体数据
                     VStack(alignment : .leading) {
-                        Text("").frame(maxWidth : .infinity)
                         Group{
                             Spacer()
                             Text(userU)
@@ -157,12 +161,12 @@ struct DCWatch: View {
                         }
                         Spacer()
                         
-                    }.frame(width : size.width * 0.75)
+                    }.frame(maxWidth : .infinity)
                 }.frame(width: size.width, height: 180, alignment: .center)
             }
-            .onAppear{
-                getData()
-            }
+//            .onAppear{
+//                getData()
+//            }
         }.frame(width : size.width)
     }
     private func getData(){
@@ -183,7 +187,7 @@ struct DCWatch: View {
                     acI = "电流：\(formatFloat(d: json["acI"].doubleValue))A"
                     acP = "功率：\(formatFloat(d: json["acP"].doubleValue))kW"
                     acE = "电量：\(formatFloat(d: json["acEp"].doubleValue))kWh"
-                    photoP = "实时功率：\(json["photoP"].doubleValue)kW"
+                    photoP = "实时功率：\(json["photoP"].doubleValue * 1000)W"
                     photoTodayE = "当日累计发电量：\(formatFloat(d: json["todayEp"].doubleValue))kWh"
                     photoTotalE = "历史累计发电量：\(formatFloat(d: json["photoEp"].doubleValue))kWh"
                     photoTime = "累计发电小时数：\(json["RunTime"].intValue)h"

@@ -221,14 +221,14 @@ struct ACWatch: View {
                     }.frame(width: size.width, height: 130, alignment: .center)
                 }.buttonStyle(PlainButtonStyle())
             }.frame(width: size.width)
-//            .onAppear{
-//                let network = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: {
-//                    _ in
-//                    refreshUI()
-//                })
-//                network.tolerance = 6
-//                network.fire()
-//            }
+            .onAppear{
+                let network = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: {
+                    _ in
+                    refreshUI()
+                })
+                network.tolerance = 6
+                network.fire()
+            }
         }
     }
     private func refreshUI(){
