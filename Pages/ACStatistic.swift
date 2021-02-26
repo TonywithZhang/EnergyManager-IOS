@@ -13,22 +13,6 @@ import SwiftyJSON
 import SwiftDate
 
 struct ACStatistic: View {
-    @State private var cityDateText = "年/季/月/日"
-    @State private var cityDate = Date()
-    @State private var showCityPicker = false
-    @State private var photoDateText = "年/季/月/日"
-    @State private var photoDate = Date()
-    @State private var showPhotoPicker = false
-    @State private var storageDateText = "年/季/月/日"
-    @State private var storageDate = Date()
-    @State private var showStoragePicker = false
-    @State private var pileDateText = "年/季/月/日"
-    @State private var pileDate = Date()
-    @State private var showPilePicker = false
-    @State private var userDateText = "年/季/月/日"
-    @State private var userDate = Date()
-    @State private var showUserPicker = false
-    
     @State private var chartData1 = LineChartData(dataSet: LineChartDataSet())
     @State private var chartX1 = [String]()
     @State private var chartData2 = LineChartData(dataSet: LineChartDataSet())
@@ -47,287 +31,35 @@ struct ACStatistic: View {
     @State private var chartData9 = BarChartData(dataSet: BarChartDataSet())
     @State private var chartX9 = [String]()
     
-    private let dateList = MultiDate()
-    
     var body: some View {
         ScrollView {
             VStack(spacing : 4) {
                 //市电图表
-                VStack {
-                    HStack(spacing : 0) {
-                        Text("市电")
-                        Spacer()
-                        TextField("年/季/月/日", text: $cityDateText).frame(width : 100)
-                            .background(Rectangle().stroke(Color.blue))
-                            .font(.subheadline)
-                            .onTapGesture(count: 1, perform: {
-                                self.showCityPicker.toggle()
-                            })
-                        Button(action : {
-                            
-                        }){
-                            Text("查询").font(.headline).foregroundColor(.white)
-                        }.background(Rectangle().fill(Color.blue))
-                    }
-                    HStack{
-                        NavigationLink(
-                            destination: ACSTatisticOne(data: chartData1, xData: chartX1, description: "A段母线功率曲线")
-                            ){
-                            ZStack {
-                                LineCharts(lineData: $chartData1, xData: $chartX1, description: "A段母线功率曲线")
-                                HStack {
-                                    VStack {
-                                        Text("单位：kW")
-                                            .font(.system(size : 12))
-                                            .fontWeight(.light)
-                                            .foregroundColor(Color.black)
-                                        Spacer()
-                                    }
-                                    Spacer()
-                                }
-                            }
-                        }
-                        NavigationLink(destination : ACSTatisticOne(data: chartData2, xData: chartX2, description: "A段母线功率曲线")){
-                            ZStack {
-                                LineCharts(lineData: $chartData2, xData: $chartX2, description: "A段母线功率曲线")
-                                HStack {
-                                    VStack {
-                                        Text("单位：kW")
-                                            .font(.system(size : 12))
-                                            .fontWeight(.light)
-                                            .foregroundColor(Color.black)
-                                        Spacer()
-                                    }
-                                    Spacer()
-                                }
-                            }
-                        }
-                        
-                    }
-                }.frame(height : 210)
-                .sheet(isPresented: $showCityPicker,onDismiss:{
-                    self.cityDateText = "\(cityDate.year)-\(cityDate.month)-\(cityDate.day)"
-                }, content: {
-                    cityPicker
-                })
+                StatisticCityPowerView(chartData1: $chartData1, chartX1: $chartX1, chartData2: $chartData2, chartX2: $chartX2)
+                    .environmentObject(MultiDate())
                 Color.gray.frame(height : 2)
                 //光伏图表
-                VStack {	
-                    HStack(spacing : 0) {
-                        Text("光伏")
-                        Spacer()
-                        TextField("年/季/月/日", text: $photoDateText).frame(width : 100)
-                            .background(Rectangle().stroke(Color.blue))
-                            .font(.subheadline)
-                            .onTapGesture(count: 1, perform: {
-                                self.showPhotoPicker.toggle()
-                            })
-                        Button(action : {
-                            
-                        }){
-                            Text("查询").font(.headline).foregroundColor(.white)
-                        }.background(Rectangle().fill(Color.blue))
-                    }
-                    HStack{
-                        NavigationLink(
-                            destination: ACStatisticTwo(barData: chartData3, xData: chartX3, description: "光伏发电量"),
-                            label: {
-                                ZStack {
-                                    BarCharts(barData: $chartData3, xData: $chartX3, description: "光伏发电量")
-                                    HStack {
-                                        VStack {
-                                            Text("单位：kWh")
-                                                .font(.system(size : 12))
-                                                .fontWeight(.light)
-                                                .foregroundColor(Color.black)
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            })
-                        NavigationLink(
-                            destination: ACStatisticTwo(barData: chartData4, xData: chartX4, description: "光伏发电小时数"),
-                            label: {
-                                ZStack {
-                                    BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
-                                    HStack {
-                                        VStack {
-                                            Text("单位：h")
-                                                .font(.system(size : 12))
-                                                .fontWeight(.light)
-                                                .foregroundColor(Color.black)
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            })
-                        
-                    }
-                }.frame(height : 210)
-                .sheet(isPresented: $showPhotoPicker,onDismiss:{
-                    self.photoDateText = "\(photoDate.year)-\(photoDate.month)-\(photoDate.day)"
-                }, content: {
-                    cityPicker
-                })
+                StatisticPhotovoltaicView(chartData3: $chartData3, chartX3: $chartX3, chartData4: $chartData4, chartX4: $chartX4)
+                    .environmentObject(MultiDate())
                 Color.gray.frame(height : 2)
                 //调峰储能的图表
-                VStack {
-                    HStack(spacing : 0) {
-                        Text("调峰储能")
-                        Spacer()
-                        TextField("年/季/月/日", text: $storageDateText).frame(width : 100)
-                            .background(Rectangle().stroke(Color.blue))
-                            .font(.subheadline)
-                            .onTapGesture(count: 1, perform: {
-                                self.showStoragePicker.toggle()
-                            })
-                        Button(action : {
-                            
-                        }){
-                            Text("查询").font(.headline).foregroundColor(.white)
-                        }.background(Rectangle().fill(Color.blue))
-                    }
-                    HStack{
-                        NavigationLink(
-                            destination: ACSTatisticOne(data: chartData5, xData: chartX5, description: "储能充放电量"),
-                            label: {
-                                ZStack {
-                                    LineCharts(lineData: $chartData5, xData: $chartX5, description: "储能充放电量")
-                                    HStack {
-                                        VStack {
-                                            Text("单位：kWh")
-                                                .font(.system(size : 12))
-                                                .fontWeight(.light)
-                                                .foregroundColor(Color.black)
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            })
-                        
-                        NavigationLink(
-                            destination: ACSTatisticOne(data: chartData6, xData: chartX6, description: "SOC"),
-                            label: {
-                                ZStack {
-                                    LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
-                                    HStack {
-                                        VStack {
-                                            Text("单位：kWh")
-                                                .font(.system(size : 12))
-                                                .fontWeight(.light)
-                                                .foregroundColor(Color.black)
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            })
-                    }
-                }.frame(height : 210)
-                .sheet(isPresented: $showStoragePicker,onDismiss:{
-                    self.storageDateText = "\(storageDate.year)-\(storageDate.month)-\(storageDate.day)"
-                }, content: {
-                    cityPicker
-                })
+                StatisticStorageView(chartData5: $chartData5, chartX5: $chartX5, chartData6: $chartData6, chartX6: $chartX6)
+                    .environmentObject(MultiDate())
                 Color.gray.frame(height : 2)
                 //充电桩的图表
-                VStack {
-                    HStack(spacing : 0) {
-                        Text("充电桩")
-                        Spacer()
-                        TextField("年/季/月/日", text: $pileDateText).frame(width : 100)
-                            .background(Rectangle().stroke(Color.blue))
-                            .font(.subheadline)
-                            .onTapGesture(count: 1, perform: {
-                                self.showPilePicker.toggle()
-                            })
-                        Button(action : {
-                            
-                        }){
-                            Text("查询").font(.headline).foregroundColor(.white)
-                        }.background(Rectangle().fill(Color.blue))
-                    }
-                    
-                    PieCharts(data: $chartData7, description: "充电功率")
-                }.frame(height : 210)
-                .sheet(isPresented: $showPilePicker,onDismiss:{
-                    self.pileDateText = "\(pileDate.year)-\(pileDate.month)-\(pileDate.day)"
-                }, content: {
-                    cityPicker
-                })
+                StatisticPileView(chartData7: $chartData7)
+                    .environmentObject(MultiDate())
                 Color.gray.frame(height : 2)
                 //用户的图表
-                VStack {
-                    HStack(spacing : 0) {
-                        Text("用户")
-                        Spacer()
-                        TextField("年/季/月/日", text: $userDateText).frame(width : 100)
-                            .background(Rectangle().stroke(Color.blue))
-                            .font(.subheadline)
-                            .onTapGesture(count: 1, perform: {
-                                self.showUserPicker.toggle()
-                            })
-                        Button(action : {
-                            
-                        }){
-                            Text("查询").font(.headline).foregroundColor(.white)
-                        }.background(Rectangle().fill(Color.blue))
-                    }
-                    HStack{
-                        NavigationLink(
-                            destination: ACSTatisticOne(data: chartData8, xData: chartX8, description: "用户用电量"),
-                            label: {
-                                ZStack {
-                                    LineCharts(lineData: $chartData8, xData: $chartX8, description: "用户用电量")
-                                    HStack {
-                                        VStack {
-                                            Text("单位：kWh")
-                                                .font(.system(size : 12))
-                                                .fontWeight(.light)
-                                                .foregroundColor(Color.black)
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            })
-                        NavigationLink(
-                            destination: ACStatisticTwo(barData: chartData9, xData: chartX9, description: "用户用电功率"),
-                            label: {
-                                ZStack {
-                                    BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电功率")
-                                    HStack {
-                                        VStack {
-                                            Text("单位：kW")
-                                                .font(.system(size : 12))
-                                                .fontWeight(.light)
-                                                .foregroundColor(Color.black)
-                                            Spacer()
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            })
-                    }
-                }.frame(height : 210)
-                .sheet(isPresented: $showUserPicker,onDismiss:{
-                    self.userDateText = "\(userDate.year)-\(userDate.month)-\(userDate.day)"
-                }, content: {
-                    cityPicker
-                })
+                StatisticUserView(chartData8: $chartData8, chartX8: $chartX8, chartData9: $chartData9, chartX9: $chartX9)
+                    .environmentObject(MultiDate())
             }
 //            .onAppear{
 //                getData()
 //            }
         }
     }
-    
-    private var cityPicker : DatesPickerView{
-        DatesPickerView(dateList: dateList)
-    }
+
     //网络请求，获取所有的数据
     private func getData(){
         let cookie = UserDefaults.standard.string(forKey: "Cookie")!
@@ -535,9 +267,7 @@ struct ACStatistic: View {
             }
         }
     }
-    private func formSelectedDate(){
-        
-    }
+
 }
 
 struct ACStatistic_Previews: PreviewProvider {
