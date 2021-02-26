@@ -22,21 +22,22 @@ struct LineCharts : UIViewRepresentable {
         let legend = view.legend
         legend.enabled = true
         legend.verticalAlignment = .top
-        legend.horizontalAlignment = .left
-        legend.textColor = UIColor(red:0x57 / 255.0,green: 0xef / 255.0,blue : 0xf5 / 255.0, alpha: 1)
+        legend.horizontalAlignment = .right
+        legend.textColor = .black
         //初始化x轴
         let x = view.xAxis
         x.valueFormatter = IndexAxisValueFormatter(values: xData)
         x.labelRotationAngle = -25
         x.labelCount = 5
         x.labelPosition = .bottom
-        x.labelTextColor = UIColor(red:0x57 / 255.0,green: 0xef / 255.0,blue : 0xf5 / 255.0, alpha: 1)
+        x.labelTextColor = .black
         //初始化y轴，关闭右边轴
-        view.leftAxis.labelTextColor = UIColor(red:0x57 / 255.0,green: 0xef / 255.0,blue : 0xf5 / 255.0, alpha: 1)
+        view.leftAxis.labelTextColor = .black
+        
         view.rightAxis.enabled = false
         //初始化描述信息
         let desc = Description()
-        desc.textColor = UIColor(red:0x57 / 255.0,green: 0xef / 255.0,blue : 0xf5 / 255.0, alpha: 1)
+        desc.textColor = .black
         desc.text = description
         view.chartDescription = desc
         view.data = lineData

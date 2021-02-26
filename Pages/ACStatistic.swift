@@ -10,6 +10,7 @@ import SwiftUI
 import Charts
 import Alamofire
 import SwiftyJSON
+import SwiftDate
 
 struct ACStatistic: View {
     @State private var cityDateText = "年/季/月/日"
@@ -45,6 +46,9 @@ struct ACStatistic: View {
     @State private var chartX8 = [String]()
     @State private var chartData9 = BarChartData(dataSet: BarChartDataSet())
     @State private var chartX9 = [String]()
+    
+    private let dateList = MultiDate()
+    
     var body: some View {
         ScrollView {
             VStack(spacing : 4) {
@@ -69,10 +73,34 @@ struct ACStatistic: View {
                         NavigationLink(
                             destination: ACSTatisticOne(data: chartData1, xData: chartX1, description: "A段母线功率曲线")
                             ){
-                            LineCharts(lineData: $chartData1, xData: $chartX1, description: "A段母线功率曲线")
+                            ZStack {
+                                LineCharts(lineData: $chartData1, xData: $chartX1, description: "A段母线功率曲线")
+                                HStack {
+                                    VStack {
+                                        Text("单位：kW")
+                                            .font(.system(size : 12))
+                                            .fontWeight(.light)
+                                            .foregroundColor(Color.black)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }
+                            }
                         }
                         NavigationLink(destination : ACSTatisticOne(data: chartData2, xData: chartX2, description: "A段母线功率曲线")){
-                            LineCharts(lineData: $chartData2, xData: $chartX2, description: "A段母线功率曲线")
+                            ZStack {
+                                LineCharts(lineData: $chartData2, xData: $chartX2, description: "A段母线功率曲线")
+                                HStack {
+                                    VStack {
+                                        Text("单位：kW")
+                                            .font(.system(size : 12))
+                                            .fontWeight(.light)
+                                            .foregroundColor(Color.black)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }
+                            }
                         }
                         
                     }
@@ -104,12 +132,36 @@ struct ACStatistic: View {
                         NavigationLink(
                             destination: ACStatisticTwo(barData: chartData3, xData: chartX3, description: "光伏发电量"),
                             label: {
-                                BarCharts(barData: $chartData3, xData: $chartX3, description: "光伏发电量")
+                                ZStack {
+                                    BarCharts(barData: $chartData3, xData: $chartX3, description: "光伏发电量")
+                                    HStack {
+                                        VStack {
+                                            Text("单位：kWh")
+                                                .font(.system(size : 12))
+                                                .fontWeight(.light)
+                                                .foregroundColor(Color.black)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             })
                         NavigationLink(
                             destination: ACStatisticTwo(barData: chartData4, xData: chartX4, description: "光伏发电小时数"),
                             label: {
-                                BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
+                                ZStack {
+                                    BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
+                                    HStack {
+                                        VStack {
+                                            Text("单位：h")
+                                                .font(.system(size : 12))
+                                                .fontWeight(.light)
+                                                .foregroundColor(Color.black)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             })
                         
                     }
@@ -141,16 +193,39 @@ struct ACStatistic: View {
                         NavigationLink(
                             destination: ACSTatisticOne(data: chartData5, xData: chartX5, description: "储能充放电量"),
                             label: {
-                                LineCharts(lineData: $chartData5, xData: $chartX5, description: "储能充放电量")
+                                ZStack {
+                                    LineCharts(lineData: $chartData5, xData: $chartX5, description: "储能充放电量")
+                                    HStack {
+                                        VStack {
+                                            Text("单位：kWh")
+                                                .font(.system(size : 12))
+                                                .fontWeight(.light)
+                                                .foregroundColor(Color.black)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             })
                         
                         NavigationLink(
                             destination: ACSTatisticOne(data: chartData6, xData: chartX6, description: "SOC"),
                             label: {
-                                LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
+                                ZStack {
+                                    LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
+                                    HStack {
+                                        VStack {
+                                            Text("单位：kWh")
+                                                .font(.system(size : 12))
+                                                .fontWeight(.light)
+                                                .foregroundColor(Color.black)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             })
-                        
-                    }		
+                    }
                 }.frame(height : 210)
                 .sheet(isPresented: $showStoragePicker,onDismiss:{
                     self.storageDateText = "\(storageDate.year)-\(storageDate.month)-\(storageDate.day)"
@@ -205,14 +280,37 @@ struct ACStatistic: View {
                         NavigationLink(
                             destination: ACSTatisticOne(data: chartData8, xData: chartX8, description: "用户用电量"),
                             label: {
-                                LineCharts(lineData: $chartData8, xData: $chartX8, description: "用户用电量")
+                                ZStack {
+                                    LineCharts(lineData: $chartData8, xData: $chartX8, description: "用户用电量")
+                                    HStack {
+                                        VStack {
+                                            Text("单位：kWh")
+                                                .font(.system(size : 12))
+                                                .fontWeight(.light)
+                                                .foregroundColor(Color.black)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             })
                         NavigationLink(
                             destination: ACStatisticTwo(barData: chartData9, xData: chartX9, description: "用户用电功率"),
                             label: {
-                                BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电功率")
+                                ZStack {
+                                    BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电功率")
+                                    HStack {
+                                        VStack {
+                                            Text("单位：kW")
+                                                .font(.system(size : 12))
+                                                .fontWeight(.light)
+                                                .foregroundColor(Color.black)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             })
-                        
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showUserPicker,onDismiss:{
@@ -220,17 +318,15 @@ struct ACStatistic: View {
                 }, content: {
                     cityPicker
                 })
-            }.onAppear{
-                getData()
             }
+//            .onAppear{
+//                getData()
+//            }
         }
     }
     
-    private var cityPicker : some View{
-        Form {
-            DatePicker("请选择一个日期", selection: $cityDate,displayedComponents:.date)
-                .labelsHidden()
-        }
+    private var cityPicker : DatesPickerView{
+        DatesPickerView(dateList: dateList)
     }
     //网络请求，获取所有的数据
     private func getData(){
@@ -406,7 +502,7 @@ struct ACStatistic: View {
                     for index in 0 ..< eighthYData.count {
                         eighthList.append(ChartDataEntry(x: Double(index), y: Double(eighthYData[index].stringValue)!))
                     }
-                    let eighthSet = LineChartDataSet(entries: eighthList,label: "1号楼")
+                    let eighthSet = LineChartDataSet(entries: eighthList,label: "用户用电量")
                     eighthSet.setColor(UIColor.blue)
                     eighthSet.valueTextColor = UIColor.blue
                     eighthSet.circleRadius = 1
@@ -438,6 +534,9 @@ struct ACStatistic: View {
                 debugPrint("网络请求失败")
             }
         }
+    }
+    private func formSelectedDate(){
+        
     }
 }
 

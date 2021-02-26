@@ -315,6 +315,7 @@ struct LandScape: View {
                 }
                 do{
                     let json = try JSON(data : data)
+                    debugPrint(json)
                     //初始化第一个折线图
                     var x1Data = [String]()
                     let firstXData = json["X1"].arrayValue
