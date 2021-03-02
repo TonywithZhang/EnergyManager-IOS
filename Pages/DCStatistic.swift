@@ -64,16 +64,15 @@ struct DCStatistic: View {
                     }
                     HStack{
                         NavigationLink(
-                            destination: ACSTatisticOne(data: chartData1, xData: chartX1, description: "功率曲线"),
+                            destination: ACSTatisticOne(data: chartData1, xData: chartX1, description: "每小时平均功率"),
                             label: {
-                                LineCharts(lineData: $chartData1, xData: $chartX1, description: "功率曲线")
+                                LineCharts(lineData: $chartData1, xData: $chartX1, description: "每小时平均功率")
                             })
                         NavigationLink(
-                            destination: ACSTatisticOne(data: chartData2, xData: chartX2, description: "电量曲线"),
+                            destination: ACSTatisticOne(data: chartData2, xData: chartX2, description: "每日电量"),
                             label: {
-                                LineCharts(lineData: $chartData2, xData: $chartX2, description: "电量曲线")
+                                LineCharts(lineData: $chartData2, xData: $chartX2, description: "每日电量")
                             })
-                        
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showInterfacePicker,onDismiss:{
@@ -102,16 +101,15 @@ struct DCStatistic: View {
                     }
                     HStack{
                         NavigationLink(
-                            destination: ACSTatisticOne(data: chartData3, xData: chartX3, description: "光伏发电量"),
+                            destination: ACSTatisticOne(data: chartData3, xData: chartX3, description: "每小时平均功率"),
                             label: {
-                                LineCharts(lineData: $chartData3, xData: $chartX3, description: "光伏发电量")
+                                LineCharts(lineData: $chartData3, xData: $chartX3, description: "每小时平均功率")
                             })
-                        NavigationLink(
-                            destination: ACStatisticTwo(barData: chartData4, xData: chartX4, description: "光伏发电小时数"),
-                            label: {
-                                BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
-                            })
-                        BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
+//                        NavigationLink(
+//                            destination: ACStatisticTwo(barData: chartData4, xData: chartX4, description: "光伏发电小时数"),
+//                            label: {
+//                                BarCharts(barData: $chartData4, xData: $chartX4, description: "光伏发电小时数")
+//                            })
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showPhotoPicker,onDismiss:{
@@ -143,12 +141,12 @@ struct DCStatistic: View {
                             label: {
                                 LineCharts(lineData: $chartData5, xData: $chartX5, description: "储能充放电量")
                             })
-                        NavigationLink(
-                            destination: ACSTatisticOne(data: chartData6, xData: chartX6, description: "SOC"),
-                            label: {
-                                LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
-                            })
-                        
+//                        NavigationLink(
+//                            destination: ACSTatisticOne(data: chartData6, xData: chartX6, description: "SOC"),
+//                            label: {
+//                                LineCharts(lineData: $chartData6, xData: $chartX6, description: "SOC")
+//                            })
+//
                     }
                 }.frame(height : 210)
                 .sheet(isPresented: $showStoragePicker,onDismiss:{
@@ -195,7 +193,7 @@ struct DCStatistic: View {
                 })
             }
             .onAppear{
-                getData()
+                getDCStatisticData()
             }
         }
     }
@@ -205,13 +203,98 @@ struct DCStatistic: View {
                 .labelsHidden()
         }
     }
-    private func getData(){
+    private func getDCStatisticData(){
+        //第一个图标
+        getData(url: "\(dcStatisticBaseUrl)GetCommunicationInterfacePowerEcharts", completion: {
+            data in
+            guard let model = try? JSONDecoder().decode(DCStatisticPowerModel.self, from: data) else{
+                return
+            }
+            chartX1 = model.X
+            chartData1 = ChartDataRepository.getLineChartData(lable: ["每小时平均功率"], ys: model.Y.map{
+                (Double($0) ?? 0.0)
+            })
+        })
+        //第二个图表
+        getData(url: "\(dcStatisticBaseUrl)GetEchartsForMonthEp", completion: {
+            data in
+            guard let model = try? JSONDecoder().decode(DCStatisticEnergyModel.self, from: data) else{
+                return
+            }
+            chartX2 = model.X
+            chartData2 = ChartDataRepository.getLineChartData(lable: ["每日电量"], ys: model.Y.map{
+                Double($0) ?? 0.0
+            })
+        })
+        //第三个图表
+        getData(url: "\(dcStatisticBaseUrl)GetEchartsForDcPhotovoltaicPower", completion: {
+            data in
+            guard let model = try? JSONDecoder().decode(DCStatisticPhotovoltaicModel.self, from: data) else{
+                return
+            }
+            chartX3 = model.X
+            chartData3 = ChartDataRepository.getLineChartData(lable: ["每小时平均功率"], ys: model.Y.map{
+                Double($0) ?? 0.0
+            })
+        })
+        //第五个图表
+        getData(url: "\(dcStatisticBaseUrl)GetDcEnergyStoragePowerEcharts", completion: {
+            data in
+            do{
+                let json = try JSON(data : data)
+                debugPrint(json)
+            }catch{
+                debugPrint("转换json发生错误")
+            }
+            guard let model = try? JSONDecoder().decode(DCStatisticStorageModel.self, from: data) else{
+                return
+            }
+            chartX5 = model.X
+            chartData5 = ChartDataRepository.getLineChartData(lable: ["储能充放电功率曲线"], ys: model.Y.map{
+                Double($0) ?? 0.0
+            })
+        })
+        //第七个图表
+        getData(url: "\(dcStatisticBaseUrl)GetDCAmmeterLogTodayEcharts", completion: {
+            data in
+            guard let model = try? JSONDecoder().decode(DCStatisticUserHourModel.self, from: data) else{
+                return
+            }
+            chartX8 = model.X
+            chartData8 = ChartDataRepository.getLineChartData(lable: ["每小时平均功率"], ys: model.Y.map{
+                Double($0) ?? 0.0
+            })
+        })
+        //第八个图表
+        getData(url: "\(dcStatisticBaseUrl)GetDCAmmeterLogMonthEcharts", completion: {
+            data in
+            guard let model = try? JSONDecoder().decode(DCStatisticUserMonthModel.self, from: data) else{
+                return
+            }
+            chartX9 = model.X
+            chartData9 = ChartDataRepository.getLineChartData(lable: ["每天发电量"], ys: model.Y.map{
+                Double($0) ?? 0.0
+            })
+        })
+    }
+    private func getData(url : String,completion : @escaping (Data) -> Void){
         let cookie = UserDefaults.standard.string(forKey: "Cookie")!
         var header = HTTPHeaders()
         header.add(name: "Cookie", value: cookie)
-        let request = AF.request("\(homeBaseUrl)GetDCStatisticData",
-                                 method: .post,
-                                 headers: header)
+        let params = [
+            "Point" : "15"
+        ]
+        var request : DataRequest
+        if url.contains("Storage"){
+            request = AF.request(url,
+                                     method: .post,
+                                     parameters: params,
+                                     headers: header)
+        }else{
+            request = AF.request(url,
+                                     method: .post,
+                                     headers: header)
+        }
         request.responseJSON{
             response in
             switch response.result{
@@ -219,149 +302,154 @@ struct DCStatistic: View {
                 guard let data = response.data else{
                     return
                 }
-                do{
-                    let json = try JSON(data : data)
-                    //刷新第一个图表
-                    var x1Data = [String]()
-                    let firstXData = json["X1"].arrayValue
-                    
-                    for item in 0 ..< firstXData.count {
-                        x1Data.append(firstXData[item].stringValue)
-                    }
-                    var firstList = [ChartDataEntry]()
-                    let firstYData = json["Y1"].arrayValue
-                    for index in 0 ..< firstYData.count {
-                        firstList.append(ChartDataEntry(x: Double(index), y: Double(firstYData[index].stringValue)!))
-                    }
-                    let firstSet = LineChartDataSet(entries: firstList,label: "A段母线功率曲线")
-                    firstSet.setColor(UIColor.blue)
-                    firstSet.valueTextColor = UIColor.blue
-                    firstSet.circleRadius = 1
-                    firstSet.circleHoleRadius = 0
-                    chartData1 = LineChartData(dataSet: firstSet)
-                    chartX1 = x1Data
-                    //刷新第二个图表
-                    var x2Data = [String]()
-                    let secondData = json["X2"].arrayValue
-                    
-                    for item in 0 ..< secondData.count {
-                        x2Data.append(secondData[item].stringValue)
-                    }
-                    var secondList = [ChartDataEntry]()
-                    let secondYData = json["Y2"].arrayValue
-                    for index in 0 ..< firstYData.count {
-                        secondList.append(ChartDataEntry(x: Double(index), y: Double(secondYData[index].stringValue)!))
-                    }
-                    let secondSet = LineChartDataSet(entries: secondList,label: "B段母线功率曲线")
-                    secondSet.setColor(UIColor.blue)
-                    secondSet.valueTextColor = UIColor.blue
-                    secondSet.circleRadius = 1
-                    secondSet.circleHoleRadius = 0
-                    chartData2 = LineChartData(dataSet: secondSet)
-                    chartX2 = x2Data
-                    //第三个图表
-                    var x3Data = [String]()
-                    let thirdData = json["X3"].arrayValue
-                    
-                    for item in 0 ..< thirdData.count {
-                        x3Data.append(thirdData[item].stringValue)
-                    }
-                    var thirdList = [ChartDataEntry]()
-                    let thirdYData = json["Y3"].arrayValue
-                    for index in 0 ..< thirdYData.count {
-                        thirdList.append(ChartDataEntry(x: Double(index), y: Double(thirdYData[index].stringValue)!))
-                    }
-                    let thirdSet = LineChartDataSet(entries: thirdList,label: "光伏发电量")
-                    thirdSet.setColor(UIColor.blue)
-                    thirdSet.valueTextColor = UIColor.blue
-                    thirdSet.circleRadius = 1
-                    thirdSet.circleHoleRadius = 0
-                    chartData3 = LineChartData(dataSet: thirdSet)
-                    chartX3 = x3Data
-                    //刷新第四个图表
-                    var x4Data = [String]()
-                    let forthData = json["dateArry4"].arrayValue
-                    
-                    for item in 0 ..< forthData.count {
-                        x4Data.append(forthData[item].stringValue)
-                    }
-                    var forthList = [BarChartDataEntry]()
-                    let forthYData = json["jiaoliu4"].arrayValue
-                    for index in 0 ..< forthYData.count {
-                        forthList.append(BarChartDataEntry(x: Double(index), y: Double(forthYData[index].stringValue)!))
-                    }
-                    let forthSet = BarChartDataSet(entries: forthList,label: "光伏发电小时数")
-                    forthSet.setColor(UIColor.blue)
-                    forthSet.valueTextColor = UIColor.blue
-                    
-                    chartData4 = BarChartData(dataSet: forthSet)
-                    chartX4 = x4Data
-                    //刷新第五个图表
-                    var x5Data = [String]()
-                    let fifthData = json["X5"].arrayValue
-                    
-                    for item in 0 ..< fifthData.count {
-                        x5Data.append(fifthData[item].stringValue)
-                    }
-                    var fifthList = [ChartDataEntry]()
-                    let fifthYData = json["Y5"].arrayValue
-                    for index in 0 ..< fifthYData.count {
-                        fifthList.append(ChartDataEntry(x: Double(index), y: Double(fifthYData[index].stringValue)!))
-                    }
-                    let fifthSet = LineChartDataSet(entries: fifthList,label: "储能充放电量")
-                    fifthSet.setColor(UIColor.blue)
-                    fifthSet.valueTextColor = UIColor.blue
-                    fifthSet.circleRadius = 1
-                    fifthSet.circleHoleRadius = 0
-                    chartData5 = LineChartData(dataSet: fifthSet)
-                    chartX5 = x5Data
-                    
-                    //刷新第七个图表
-                    var x8Data = [String]()
-                    let eighthData = json["X7"].arrayValue
-                    
-                    for item in 0 ..< eighthData.count {
-                        x8Data.append(eighthData[item].stringValue)
-                    }
-                    var eighthList = [ChartDataEntry]()
-                    let eighthYData = json["Y7"].arrayValue
-                    for index in 0 ..< eighthYData.count {
-                        eighthList.append(ChartDataEntry(x: Double(index), y: Double(eighthYData[index].stringValue)!))
-                    }
-                    let eighthSet = LineChartDataSet(entries: eighthList,label: "1号楼")
-                    eighthSet.setColor(UIColor.blue)
-                    eighthSet.valueTextColor = UIColor.blue
-                    eighthSet.circleRadius = 1
-                    eighthSet.circleHoleRadius = 0
-                    chartData8 = LineChartData(dataSet: eighthSet)
-                    chartX8 = x8Data
-                    //更新第八个图表
-                    var x9Data = [String]()
-                    let ninthData = json["X8"].arrayValue
-                    
-                    for item in 0 ..< ninthData.count {
-                        x9Data.append(ninthData[item].stringValue)
-                    }
-                    var ninthList = [ChartDataEntry]()
-                    let ninthYData = json["Y8"].arrayValue
-                    for index in 0 ..< ninthYData.count {
-                        ninthList.append(ChartDataEntry(x: Double(index), y: Double(ninthYData[index].stringValue)!))
-                    }
-                    let ninthSet = LineChartDataSet(entries: ninthList,label: "用户用电功率")
-                    ninthSet.setColor(UIColor.blue)
-                    ninthSet.valueTextColor = UIColor.blue
-                    ninthSet.circleRadius = 1
-                    ninthSet.circleHoleRadius = 0
-                    chartData9 = LineChartData(dataSet: ninthSet)
-                    chartX9 = x9Data
-                }catch{
-                    debugPrint("json解析失败")
-                }
+                
+                completion(data)
+//                do{
+//                    let json = try JSON(data : data)
+//
+//                    //刷新第一个图表
+//                    var x1Data = [String]()
+//                    let firstXData = json["X1"].arrayValue
+//
+//                    for item in 0 ..< firstXData.count {
+//                        x1Data.append(firstXData[item].stringValue)
+//                    }
+//                    var firstList = [ChartDataEntry]()
+//                    let firstYData = json["Y1"].arrayValue
+//                    for index in 0 ..< firstYData.count {
+//                        firstList.append(ChartDataEntry(x: Double(index), y: Double(firstYData[index].stringValue)!))
+//                    }
+//                    let firstSet = LineChartDataSet(entries: firstList,label: "A段母线功率曲线")
+//                    firstSet.setColor(UIColor.blue)
+//                    firstSet.valueTextColor = UIColor.blue
+//                    firstSet.circleRadius = 1
+//                    firstSet.circleHoleRadius = 0
+//                    chartData1 = LineChartData(dataSet: firstSet)
+//                    chartX1 = x1Data
+//                    //刷新第二个图表
+//                    var x2Data = [String]()
+//                    let secondData = json["X2"].arrayValue
+//
+//                    for item in 0 ..< secondData.count {
+//                        x2Data.append(secondData[item].stringValue)
+//                    }
+//                    var secondList = [ChartDataEntry]()
+//                    let secondYData = json["Y2"].arrayValue
+//                    for index in 0 ..< firstYData.count {
+//                        secondList.append(ChartDataEntry(x: Double(index), y: Double(secondYData[index].stringValue)!))
+//                    }
+//                    let secondSet = LineChartDataSet(entries: secondList,label: "B段母线功率曲线")
+//                    secondSet.setColor(UIColor.blue)
+//                    secondSet.valueTextColor = UIColor.blue
+//                    secondSet.circleRadius = 1
+//                    secondSet.circleHoleRadius = 0
+//                    chartData2 = LineChartData(dataSet: secondSet)
+//                    chartX2 = x2Data
+//                    //第三个图表
+//                    var x3Data = [String]()
+//                    let thirdData = json["X3"].arrayValue
+//
+//                    for item in 0 ..< thirdData.count {
+//                        x3Data.append(thirdData[item].stringValue)
+//                    }
+//                    var thirdList = [ChartDataEntry]()
+//                    let thirdYData = json["Y3"].arrayValue
+//                    for index in 0 ..< thirdYData.count {
+//                        thirdList.append(ChartDataEntry(x: Double(index), y: Double(thirdYData[index].stringValue)!))
+//                    }
+//                    let thirdSet = LineChartDataSet(entries: thirdList,label: "光伏发电量")
+//                    thirdSet.setColor(UIColor.blue)
+//                    thirdSet.valueTextColor = UIColor.blue
+//                    thirdSet.circleRadius = 1
+//                    thirdSet.circleHoleRadius = 0
+//                    chartData3 = LineChartData(dataSet: thirdSet)
+//                    chartX3 = x3Data
+//                    //刷新第四个图表
+//                    var x4Data = [String]()
+//                    let forthData = json["dateArry4"].arrayValue
+//
+//                    for item in 0 ..< forthData.count {
+//                        x4Data.append(forthData[item].stringValue)
+//                    }
+//                    var forthList = [BarChartDataEntry]()
+//                    let forthYData = json["jiaoliu4"].arrayValue
+//                    for index in 0 ..< forthYData.count {
+//                        forthList.append(BarChartDataEntry(x: Double(index), y: Double(forthYData[index].stringValue)!))
+//                    }
+//                    let forthSet = BarChartDataSet(entries: forthList,label: "光伏发电小时数")
+//                    forthSet.setColor(UIColor.blue)
+//                    forthSet.valueTextColor = UIColor.blue
+//
+//                    chartData4 = BarChartData(dataSet: forthSet)
+//                    chartX4 = x4Data
+//                    //刷新第五个图表
+//                    var x5Data = [String]()
+//                    let fifthData = json["X5"].arrayValue
+//
+//                    for item in 0 ..< fifthData.count {
+//                        x5Data.append(fifthData[item].stringValue)
+//                    }
+//                    var fifthList = [ChartDataEntry]()
+//                    let fifthYData = json["Y5"].arrayValue
+//                    for index in 0 ..< fifthYData.count {
+//                        fifthList.append(ChartDataEntry(x: Double(index), y: Double(fifthYData[index].stringValue)!))
+//                    }
+//                    let fifthSet = LineChartDataSet(entries: fifthList,label: "储能充放电量")
+//                    fifthSet.setColor(UIColor.blue)
+//                    fifthSet.valueTextColor = UIColor.blue
+//                    fifthSet.circleRadius = 1
+//                    fifthSet.circleHoleRadius = 0
+//                    chartData5 = LineChartData(dataSet: fifthSet)
+//                    chartX5 = x5Data
+//
+//                    //刷新第七个图表
+//                    var x8Data = [String]()
+//                    let eighthData = json["X7"].arrayValue
+//
+//                    for item in 0 ..< eighthData.count {
+//                        x8Data.append(eighthData[item].stringValue)
+//                    }
+//                    var eighthList = [ChartDataEntry]()
+//                    let eighthYData = json["Y7"].arrayValue
+//                    for index in 0 ..< eighthYData.count {
+//                        eighthList.append(ChartDataEntry(x: Double(index), y: Double(eighthYData[index].stringValue)!))
+//                    }
+//                    let eighthSet = LineChartDataSet(entries: eighthList,label: "1号楼")
+//                    eighthSet.setColor(UIColor.blue)
+//                    eighthSet.valueTextColor = UIColor.blue
+//                    eighthSet.circleRadius = 1
+//                    eighthSet.circleHoleRadius = 0
+//                    chartData8 = LineChartData(dataSet: eighthSet)
+//                    chartX8 = x8Data
+//                    //更新第八个图表
+//                    var x9Data = [String]()
+//                    let ninthData = json["X8"].arrayValue
+//
+//                    for item in 0 ..< ninthData.count {
+//                        x9Data.append(ninthData[item].stringValue)
+//                    }
+//                    var ninthList = [ChartDataEntry]()
+//                    let ninthYData = json["Y8"].arrayValue
+//                    for index in 0 ..< ninthYData.count {
+//                        ninthList.append(ChartDataEntry(x: Double(index), y: Double(ninthYData[index].stringValue)!))
+//                    }
+//                    let ninthSet = LineChartDataSet(entries: ninthList,label: "用户用电功率")
+//                    ninthSet.setColor(UIColor.blue)
+//                    ninthSet.valueTextColor = UIColor.blue
+//                    ninthSet.circleRadius = 1
+//                    ninthSet.circleHoleRadius = 0
+//                    chartData9 = LineChartData(dataSet: ninthSet)
+//                    chartX9 = x9Data
+//                }catch{
+//                    debugPrint("json解析失败")
+//                }
             case .failure(_):
                 debugPrint("网络请求失败")
+                return
             }
         }
     }
+    private let dcStatisticBaseUrl = "http://101.132.236.192:8008/SIManage/DCSystem/"
 }
 
 struct DCStatistic_Previews: PreviewProvider {

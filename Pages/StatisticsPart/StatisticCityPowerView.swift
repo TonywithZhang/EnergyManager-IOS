@@ -90,7 +90,6 @@ struct StatisticCityPowerView: View {
     }
     
     private func refreshChart(){
-        debugPrint("开始刷新图表")
         let cookie = UserDefaults.standard.string(forKey: "Cookie")!
         var header = HTTPHeaders()
         header.add(name: "Cookie", value: cookie)
@@ -105,12 +104,6 @@ struct StatisticCityPowerView: View {
             case .success(_):
                 guard let data = response.data else {
                     return
-                }
-                do{
-                    let json = try JSON(data : data)
-                    debugPrint(json)
-                }catch{
-                    
                 }
                 guard let model = try? JSONDecoder().decode(StatisticCityPowerModel.self, from: data) else {
                     return
