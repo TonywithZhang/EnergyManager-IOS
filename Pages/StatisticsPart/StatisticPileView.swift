@@ -16,6 +16,7 @@ struct StatisticPileView: View {
     @State private var pileDateText = ""
     @Binding var chartData7 : PieChartData
     
+    @State private var index = 0
     var body: some View {
         VStack {
             HStack(spacing : 0) {
@@ -46,7 +47,7 @@ struct StatisticPileView: View {
                 self.pileDateText = dateList.years
             }
         }, content: {
-            DatesPickerView(dateList: dateList)
+            DatesPickerView(dateList: dateList,showUserSelection: false, selectedIndex: $index)
         })
     }
 }

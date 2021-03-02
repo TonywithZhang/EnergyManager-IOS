@@ -11,6 +11,12 @@ import SwiftUI
 struct DatesPickerView: View {
     @State private var selectedDays = ""
     let dateList : MultiDate
+    
+    let showUserSelection  : Bool
+    @State private var showUserPicker = false
+    @State private var user = ""
+    @Binding var selectedIndex : Int
+    
     @State private var showDayPicker = false
     @State private var selectedMonths = ""
     @State private var showMonthPicker = false
@@ -29,6 +35,45 @@ struct DatesPickerView: View {
                 .padding()
             Form {
                 VStack {
+                    //选择用户的界面
+                    if showUserSelection{
+                        HStack {
+                            Text("用户")
+                            Spacer()
+                            TextField("默认A56", text: $user)
+                                .frame(width : 120)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .onTapGesture {
+                                    showUserPicker = true
+                                }
+                                .sheet(isPresented: $showUserPicker, onDismiss: {
+                                    user = users[selectedIndex]
+                                }, content: {
+                                    VStack {
+                                        Image(systemName: "chevron.compact.down")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .foregroundColor(.black)
+                                            .frame(height : 15)
+                                            .padding()
+                                        List(users,id : \.self){ single in
+                                            HStack{
+                                                Text(single)
+                                                Spacer()
+                                                if selectedIndex == users.firstIndex(of: single){
+                                                    Image(systemName: "checkmark")
+                                                        .foregroundColor(.red)
+                                                }
+                                            }.contentShape(Rectangle())
+                                            .onTapGesture{
+                                                selectedIndex = users.firstIndex(of: single)!
+                                            }
+                                        }
+                                    }
+                                })
+                        }
+                        Divider()
+                    }
                     HStack {
                         Text("日")
                         Spacer()
@@ -125,7 +170,9 @@ struct DatesPickerView: View {
 }
 
 struct DatesPickerView_Previews: PreviewProvider {
+    @State static var index = 0
     static var previews: some View {
-        DatesPickerView(dateList: MultiDate())
+        DatesPickerView(dateList: MultiDate(),showUserSelection: true,selectedIndex: $index)
     }
 }
+let users = ["A56","C55","F57","D46","VVIP会所","配套酒店公寓","小镇餐厅","多功能厅","晨响一层空调","晨响二层空调","综合办公楼","游泳池室外电源","游泳池总","游泳池大屏"]

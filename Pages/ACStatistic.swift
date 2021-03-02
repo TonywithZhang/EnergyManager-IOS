@@ -76,7 +76,8 @@ struct ACStatistic: View {
                     return
                 }
                 do{
-                    guard let statisticData = try? JSONDecoder().decode(StatisticCityPowerModel.self,from : data) else{
+                    _ = try JSON(data : data)
+                    guard let statisticData = try? JSONDecoder().decode(StatisticAlternateModel.self,from : data) else{
                         return
                     }
                     //第一个图表

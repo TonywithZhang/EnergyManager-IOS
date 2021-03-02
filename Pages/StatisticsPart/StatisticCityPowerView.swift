@@ -8,6 +8,8 @@
 
 import SwiftUI
 import Charts
+import Alamofire
+import SwiftyJSON
 
 struct StatisticCityPowerView: View {
     @EnvironmentObject var dateList : MultiDate
@@ -18,6 +20,9 @@ struct StatisticCityPowerView: View {
     @Binding var chartX1 : [String]
     @Binding var chartData2 : LineChartData
     @Binding var chartX2 : [String]
+    
+    @State private var index = 0
+    
     var body: some View {
         VStack {
             HStack(spacing : 0) {
@@ -30,7 +35,7 @@ struct StatisticCityPowerView: View {
                         self.showCityPicker.toggle()
                     })
                 Button(action : {
-                    
+                    refreshChart()
                 }){
                     Text("查询").font(.headline).foregroundColor(.white)
                 }.background(Rectangle().fill(Color.blue))
@@ -53,9 +58,9 @@ struct StatisticCityPowerView: View {
                         }
                     }
                 }
-                NavigationLink(destination : ACSTatisticOne(data: chartData2, xData: chartX2, description: "A段母线功率曲线")){
+                NavigationLink(destination : ACSTatisticOne(data: chartData2, xData: chartX2, description: "B段母线功率曲线")){
                     ZStack {
-                        LineCharts(lineData: $chartData2, xData: $chartX2, description: "A段母线功率曲线")
+                        LineCharts(lineData: $chartData2, xData: $chartX2, description: "B段母线功率曲线")
                         HStack {
                             VStack {
                                 Text("单位：kW")
@@ -80,7 +85,56 @@ struct StatisticCityPowerView: View {
                 cityPowerText = dateList.years
             }
         }, content: {
-            DatesPickerView(dateList: dateList)
+            DatesPickerView(dateList: dateList,showUserSelection: false,selectedIndex: $index)
         })
+    }
+    
+    private func refreshChart(){
+        debugPrint("开始刷新图表")
+        let cookie = UserDefaults.standard.string(forKey: "Cookie")!
+        var header = HTTPHeaders()
+        header.add(name: "Cookie", value: cookie)
+        let dic = [
+            "days" : dateList.days,
+            "months" : dateList.months,
+            "years" : dateList.years
+        ]
+        AF.request("http://101.132.236.192:8008/ReportManage/Echarts/\(getURL())",method: .post,parameters: dic,headers: header).responseJSON{
+            response in
+            switch response.result{
+            case .success(_):
+                guard let data = response.data else {
+                    return
+                }
+                do{
+                    let json = try JSON(data : data)
+                    debugPrint(json)
+                }catch{
+                    
+                }
+                guard let model = try? JSONDecoder().decode(StatisticCityPowerModel.self, from: data) else {
+                    return
+                }
+                chartX1 = model.aTime
+                chartData1 = ChartDataRepository.getLineChartData(lable: ["A段母线功率曲线"], ys: model.aData?.data.map{
+                    Double($0)
+                } ?? [0.0])
+                chartX2 = model.bTime
+                chartData2 = ChartDataRepository.getLineChartData(lable: ["B段母线功率曲线"], ys: model.bData?.data.map{
+                    Double($0)
+                } ?? [0.0])
+            case .failure(_):
+                debugPrint("统计分析-交流市电界面网络请求失败")
+            }
+        }
+    }
+    private func getURL() -> String{
+        if !dateList.days.isEmpty{
+            return "getCityPowerDayData"
+        }else if !dateList.months.isEmpty{
+            return "getCityPowerMonthData"
+        }else{
+            return "getCityPowerYearData"
+        }
     }
 }

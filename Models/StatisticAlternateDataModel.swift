@@ -10,7 +10,7 @@ import Foundation
 
 
 ///
-struct  StatisticCityPowerModel : Codable{
+struct  StatisticAlternateModel : Codable{
     
     var jiaoliu3: [String] = []
     

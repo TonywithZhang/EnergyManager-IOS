@@ -8,6 +8,8 @@
 
 import SwiftUI
 import Charts
+import SwiftyJSON
+import Alamofire
 
 struct StatisticPhotovoltaicView: View {
     @EnvironmentObject var dateList : MultiDate
@@ -18,6 +20,8 @@ struct StatisticPhotovoltaicView: View {
     @Binding var chartX3 : [String]
     @Binding var chartData4 : BarChartData
     @Binding var chartX4 : [String]
+    
+    @State private var index = 0
     
     var body: some View {
         VStack {
@@ -31,7 +35,7 @@ struct StatisticPhotovoltaicView: View {
                         self.showPhotoPicker.toggle()
                     })
                 Button(action : {
-                    
+                    refreshChart()
                 }){
                     Text("查询").font(.headline).foregroundColor(.white)
                 }.background(Rectangle().fill(Color.blue))
@@ -83,7 +87,45 @@ struct StatisticPhotovoltaicView: View {
                 self.photoDateText = dateList.years
             }
         }, content: {
-            DatesPickerView(dateList: dateList)
+            DatesPickerView(dateList: dateList, showUserSelection: false,selectedIndex: $index)
         })
+    }
+    private func refreshChart(){
+        let cookie = UserDefaults.standard.string(forKey: "Cookie")!
+        var header = HTTPHeaders()
+        header.add(name: "Cookie", value: cookie)
+        let dic = [
+            "days" : dateList.days,
+            "months" : dateList.months,
+            "years" : dateList.years
+        ]
+        AF.request("http://101.132.236.192:8008/ReportManage/Echarts/\(getURL())",method: .post,parameters: dic,headers: header).responseJSON{
+            response in
+            switch response.result{
+            case .success(_):
+                guard let data = response.data else {
+                    return
+                }
+                guard let model = try? JSONDecoder().decode(StatisticPhotovoltaicModel.self, from: data) else {
+                    return
+                }
+                chartX3 = model.time
+                chartData3 = ChartDataRepository.getBarChartData(lable: ["光伏发电量"], ys: model.data?.data.map{
+                    Double($0)
+                } ?? [0.0])
+                
+            case .failure(_):
+                debugPrint("统计分析-交流光伏界面网络请求失败")
+            }
+        }
+    }
+    private func getURL() -> String{
+        if !dateList.days.isEmpty{
+            return "getPhotovaiticDayData"
+        }else if !dateList.months.isEmpty{
+            return "getPhotovaiticMonthData"
+        }else{
+            return "getPhotovaiticYearData"
+        }
     }
 }

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Charts
+import Alamofire
 
 struct StatisticStorageView: View {
     
@@ -20,6 +21,7 @@ struct StatisticStorageView: View {
     @Binding var chartData6 : LineChartData
     @Binding var chartX6 : [String]
     
+    @State private var index = 0
     var body: some View {
         VStack {
             HStack(spacing : 0) {
@@ -32,7 +34,7 @@ struct StatisticStorageView: View {
                         self.showStoragePicker.toggle()
                     })
                 Button(action : {
-                    
+                    refreshChart()
                 }){
                     Text("查询").font(.headline).foregroundColor(.white)
                 }.background(Rectangle().fill(Color.blue))
@@ -85,7 +87,47 @@ struct StatisticStorageView: View {
                 self.storageDateText = dateList.years
             }
         }, content: {
-            DatesPickerView(dateList: dateList)
+            DatesPickerView(dateList: dateList,showUserSelection: false,selectedIndex: $index)
         })
+    }
+    
+    private func refreshChart(){
+        let cookie = UserDefaults.standard.string(forKey: "Cookie")!
+        var header = HTTPHeaders()
+        header.add(name: "Cookie", value: cookie)
+        let dic = [
+            "days" : dateList.days,
+            "months" : dateList.months,
+            "years" : dateList.years
+        ]
+        AF.request("http://101.132.236.192:8008/ReportManage/Echarts/\(getURL())",method: .post,parameters: dic,headers: header).responseJSON{
+            response in
+            switch response.result{
+            case .success(_):
+                guard let data = response.data else {
+                    return
+                }
+                guard let model = try? JSONDecoder().decode(StatisticStorageModel.self, from: data) else {
+                    return
+                }
+                chartX5 = model.time
+                chartData5 = ChartDataRepository.getLineChartData(lable: ["储能充电量"], ys: model.data[0].data)
+                chartX6 = model.time
+                chartData6 = ChartDataRepository.getLineChartData(lable: ["储能放电量"], ys: model.data[1].data.map{
+                    abs($0)
+                })
+            case .failure(_):
+                debugPrint("统计分析-交流光伏界面网络请求失败")
+            }
+        }
+    }
+    private func getURL() -> String{
+        if !dateList.days.isEmpty{
+            return "getStorageDayData"
+        }else if !dateList.months.isEmpty{
+            return "getStorageMonthData"
+        }else{
+            return "getStorageYearData"
+        }
     }
 }
