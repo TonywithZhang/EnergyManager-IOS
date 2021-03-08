@@ -113,22 +113,34 @@ struct ACWatch: View {
                         }.frame(width : size.width * 0.15)
                         .padding()
                         //光伏界面具体内容
-                        VStack(alignment : .leading) {
-                            Spacer()
-                            Text(photoPower)
-                                .font(.system(size: 12))
-                            Spacer()
-                            Text(photoTodayEnergy)
-                                .font(.system(size: 12))
-                            Spacer()
-                            Text(photoTotalEnergy)
-                                .font(.system(size: 12))
-                            Spacer()
-                            Text(photoTime)
-                                .font(.system(size: 12))
-                            Spacer()
-                        }.frame(maxWidth : .infinity)
-                        
+                        ZStack {
+                            VStack(alignment : .leading) {
+                                Spacer()
+                                Text(photoPower)
+                                    .font(.system(size: 12))
+                                Spacer()
+                                Text(photoTodayEnergy)
+                                    .font(.system(size: 12))
+                                Spacer()
+                                Text(photoTotalEnergy)
+                                    .font(.system(size: 12))
+                                Spacer()
+                                Text(photoTime)
+                                    .font(.system(size: 12))
+                                Spacer()
+                            }.frame(maxWidth : .infinity)
+                            HStack{
+                                Spacer()
+                                VStack{
+                                    Spacer()
+                                    NavigationLink(
+                                        destination: PhotoPage(),
+                                        label: {
+                                            Text("逆变器")
+                                        })
+                                }
+                            }
+                        }
                     }.frame(width: size.width, height: 150, alignment: .center)
                 }
                 .buttonStyle(PlainButtonStyle())

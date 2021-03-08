@@ -18,7 +18,7 @@ struct YearPicker: View {
     
     init(startYear : Int,endYear : Int) {
         for item in startYear ... endYear {
-            years.append(item)
+            years.append(item) 
         }
     }
 }

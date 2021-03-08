@@ -11,11 +11,14 @@ import SwiftUI
 struct User: View {
     var body: some View {
         NavigationView {
-            VStack(alignment : .leading) {
+            VStack{
+                Spacer().frame(height : 80)
                 HStack{
+                    Spacer()
                     Image(systemName: "person.circle")
                         .font(.largeTitle)
                     Text("admin")
+                    Spacer()
                 }
                 .padding()
                 Section {
@@ -26,7 +29,6 @@ struct User: View {
                                 Text("密码修改")
                             }
                         }
-                        
                         .navigationBarHidden(true)
                         NavigationLink(destination : PersonalInformation()) {
                             HStack {
@@ -44,7 +46,6 @@ struct User: View {
                         .navigationBarHidden(true)
                     }
                 }.cornerRadius(10)
-                Spacer()
             }
         }
     }

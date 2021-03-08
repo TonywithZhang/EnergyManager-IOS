@@ -76,7 +76,8 @@ struct ACStatistic: View {
                     return
                 }
                 do{
-                    _ = try JSON(data : data)
+                    let json = try JSON(data : data)
+                    debugPrint(json)
                     guard let statisticData = try? JSONDecoder().decode(StatisticAlternateModel.self,from : data) else{
                         return
                     }
@@ -121,15 +122,13 @@ struct ACStatistic: View {
                         Double($0)
                     })
                     //第八个图表
-                    chartX8 = statisticData.X8
-                    chartData8 = ChartDataRepository.getLineChartData(lable: ["用户1用电量","用户2用电量"], ys: statisticData.Y8.map{
+                    chartX8 = statisticData.X8 ?? [Date().toString()]
+                    chartData8 = ChartDataRepository.getLineChartData(lable: ["用户1用电功率"], ys: statisticData.Y8?.map{
                         Double($0)
-                    },statisticData.Y82.map{
-                        Double($0)
-                    })
+                    } ?? [0.0])
                     //第九个图表
                     chartX9 = statisticData.X9
-                    chartData9 = ChartDataRepository.getBarChartData(lable: ["用户用电功率"], ys: statisticData.Y9.map{
+                    chartData9 = ChartDataRepository.getBarChartData(lable: ["用户用电量"], ys: statisticData.Y9.map{
                         (Double($0) ?? 0.0)
                     })
 //                    let json = try JSON(data : data)

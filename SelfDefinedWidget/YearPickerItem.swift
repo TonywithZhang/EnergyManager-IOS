@@ -36,6 +36,6 @@ struct YearPickerItem: View {
 
 struct YearPickerItem_Previews: PreviewProvider {
     static var previews: some View {
-        YearPickerItem(year: 2020)
+        YearPickerItem(year: 2020).environmentObject(MultiDate())
     }
 }

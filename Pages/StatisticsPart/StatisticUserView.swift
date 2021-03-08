@@ -9,6 +9,7 @@
 import SwiftUI
 import Charts
 import Alamofire
+import SwiftyJSON
 
 struct StatisticUserView: View {
     @EnvironmentObject var dateList : MultiDate
@@ -20,11 +21,28 @@ struct StatisticUserView: View {
     @Binding var chartX8 : [String]
     @Binding var chartData9 : BarChartData
     @Binding var chartX9 : [String]
+    
+    @State var currentUser = ""
+    @State var showUsers = false
+    @State var selectedIndex = 0
+    
+    @State private var warning = ""
     var body: some View {
         VStack {
             HStack(spacing : 0) {
                 Text("用户")
-                Spacer()
+                TextField("请选择用户",text : $currentUser)
+                    .frame(width : 100)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .font(.subheadline)
+                    .onTapGesture(count: 1, perform: {
+                        self.showUsers.toggle()
+                    })
+                    
+                Text(warning)
+                    .foregroundColor(.red)
+                    .font(.system(size: 12))
+                Spacer()    
                 TextField("年/季/月/日", text: $userDateText).frame(width : 100)
                     .background(Rectangle().stroke(Color.blue))
                     .font(.subheadline)
@@ -39,13 +57,13 @@ struct StatisticUserView: View {
             }
             HStack{
                 NavigationLink(
-                    destination: ACSTatisticOne(data: chartData8, xData: chartX8, description: "用户用电量"),
+                    destination: ACSTatisticOne(data: chartData8, xData: chartX8, description: "今日用户用电功率"),
                     label: {
                         ZStack {
-                            LineCharts(lineData: $chartData8, xData: $chartX8, description: "用户用电量")
+                            LineCharts(lineData: $chartData8, xData: $chartX8, description: "今日用户用电功率")
                             HStack {
                                 VStack {
-                                    Text("单位：kWh")
+                                    Text("单位：kW")
                                         .font(.system(size : 12))
                                         .fontWeight(.light)
                                         .foregroundColor(Color.black)
@@ -56,13 +74,13 @@ struct StatisticUserView: View {
                         }
                     })
                 NavigationLink(
-                    destination: ACStatisticTwo(barData: chartData9, xData: chartX9, description: "用户用电功率"),
+                    destination: ACStatisticTwo(barData: chartData9, xData: chartX9, description: "用户用电量"),
                     label: {
                         ZStack {
-                            BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电功率")
+                            BarCharts(barData: $chartData9, xData: $chartX9, description: "用户用电量")
                             HStack {
                                 VStack {
-                                    Text("单位：kW")
+                                    Text("单位：kWh")
                                         .font(.system(size : 12))
                                         .fontWeight(.light)
                                         .foregroundColor(Color.black)
@@ -86,6 +104,32 @@ struct StatisticUserView: View {
         }, content: {
             DatesPickerView(dateList: dateList,showUserSelection: true, selectedIndex: $userIndex)
         })
+        .sheet(isPresented: $showUsers,onDismiss: {
+            getTodayUserData()
+        }, content: {
+            VStack {
+                Image(systemName: "chevron.compact.down")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.black)
+                    .frame(height : 15)
+                    .padding()
+                List(users,id : \.self){ single in
+                    HStack{
+                        Text(single)
+                        Spacer()
+                        if selectedIndex == users.firstIndex(of: single){
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.red)
+                        }
+                    }.contentShape(Rectangle())
+                    .onTapGesture{
+                        selectedIndex = users.firstIndex(of: single)!
+                        currentUser = single
+                    }
+                }
+            }
+        })
     }
     private func refreshChart(){
         let cookie = UserDefaults.standard.string(forKey: "Cookie")!
@@ -107,8 +151,8 @@ struct StatisticUserView: View {
                 guard let model = try? JSONDecoder().decode(StatisticUserModel.self, from: data) else {
                     return
                 }
-                chartX8 = model.time
-                chartData8 = ChartDataRepository.getLineChartData(lable: ["\(users[userIndex])用电量"], ys: model.data?.data.map{
+                chartX9 = model.time
+                chartData9 = ChartDataRepository.getBarChartData(lable: ["\(users[userIndex])用电量"], ys: model.data?.data.map{
                     Double($0)
                 } ?? [0.0])
                 
@@ -117,6 +161,51 @@ struct StatisticUserView: View {
             }
         }
     }
+    
+    private func getTodayUserData(){
+        let cookie = UserDefaults.standard.string(forKey: "Cookie")!
+        var header = HTTPHeaders()
+        header.add(name: "Cookie", value: cookie)
+        let dic = [
+            "number" : "\(selectedIndex)"
+        ]
+        AF.request("\(homeBaseUrl)getTodayUserData",method: .post,parameters: dic,headers: header).responseJSON{
+            response in
+            switch response.result{
+            case .success(_):
+                guard let data = response.data else {
+                    return
+                }
+                do{
+                    let json = try JSON(data : data)
+                    debugPrint(json)
+                }catch{
+                    debugPrint("转换json发生错误")
+                }
+                guard let model = try? JSONDecoder().decode(UserCostModel.self, from: data) else {
+                    warning = "当前用户今日无数据！"
+                    return
+                }
+                if model.x != nil{
+                    if model.x!.count == 0 {
+                        warning = "当前用户今日无数据！"
+                        break
+                    }
+                    chartX8 = model.x!
+                    chartData8 = ChartDataRepository.getLineChartData(lable: ["\(users[userIndex])用电量"], ys: model.y?.map{
+                        Double($0)
+                    } ?? [0.0])
+                }
+                else{
+                    warning = "当前用户今日无数据！"
+                }
+                
+            case .failure(_):
+                debugPrint("统计分析-交流用户界面网络请求失败")
+            }
+        }
+    }
+    
     private func getURL() -> String{
         if !dateList.days.isEmpty{
             return "getUserDayData"

@@ -240,12 +240,6 @@ struct DCStatistic: View {
         //第五个图表
         getData(url: "\(dcStatisticBaseUrl)GetDcEnergyStoragePowerEcharts", completion: {
             data in
-            do{
-                let json = try JSON(data : data)
-                debugPrint(json)
-            }catch{
-                debugPrint("转换json发生错误")
-            }
             guard let model = try? JSONDecoder().decode(DCStatisticStorageModel.self, from: data) else{
                 return
             }

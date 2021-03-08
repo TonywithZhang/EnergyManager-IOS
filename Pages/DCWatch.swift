@@ -40,6 +40,7 @@ struct DCWatch: View {
                     //名称和图标
                     VStack {
                         Text("交流接口")
+                            
                         Image(systemName: "personalhotspot")
                             .resizable()
                             .scaledToFit()
@@ -51,12 +52,16 @@ struct DCWatch: View {
                     VStack(alignment : .leading) {
                         Spacer()
                         Text(acU)
+                            .font(.system(size: 12))
                         Spacer()
                         Text(acI)
+                            .font(.system(size: 12))
                         Spacer()
                         Text(acP)
+                            .font(.system(size: 12))
                         Spacer()
                         Text(acE)
+                            .font(.system(size: 12))
                         Spacer()
                     }.frame(maxWidth : .infinity)
                 }.frame(width: size.width, height: 180, alignment: .center)
@@ -78,12 +83,16 @@ struct DCWatch: View {
                     VStack(alignment : .leading) {
                         Spacer()
                         Text(photoP)
+                            .font(.system(size: 12))
                         Spacer()
                         Text(photoTodayE)
+                            .font(.system(size: 12))
                         Spacer()
                         Text(photoTotalE)
+                            .font(.system(size: 12))
                         Spacer()
                         Text(photoTime)
+                            .font(.system(size: 12))
                         Spacer()
                     }.frame(maxWidth : .infinity)
                 }.frame(width: size.width, height: 180, alignment: .center)
@@ -107,22 +116,27 @@ struct DCWatch: View {
                         Group{
                             Spacer()
                             Text(storageU)
+                                .font(.system(size: 12))
                         }
                         Group{
                             Spacer()
                             Text(storageI)
+                                .font(.system(size: 12))
                         }
                         Group{
                             Spacer()
                             Text(storageP)
+                                .font(.system(size: 12))
                         }
                         Group{
                             Spacer()
                             Text("电量：")
+                                .font(.system(size: 12))
                         }
                         Spacer()
                         Group{
                             Text("soc：")
+                                .font(.system(size: 12))
                             Spacer()
                         }
                     }.frame(maxWidth : .infinity)
@@ -146,27 +160,31 @@ struct DCWatch: View {
                         Group{
                             Spacer()
                             Text(userU)
+                                .font(.system(size: 12))
                         }
                         Group{
                             Spacer()
                             Text(userI)
+                                .font(.system(size: 12))
                         }
                         Group{
                             Spacer()
                             Text(userP)
+                                .font(.system(size: 12))
                         }
                         Group{
                             Spacer()
                             Text(userE)
+                                .font(.system(size: 12))
                         }
                         Spacer()
                         
                     }.frame(maxWidth : .infinity)
                 }.frame(width: size.width, height: 180, alignment: .center)
             }
-//            .onAppear{
-//                getData()
-//            }
+            .onAppear{
+                getData()
+            }
         }.frame(width : size.width)
     }
     private func getData(){

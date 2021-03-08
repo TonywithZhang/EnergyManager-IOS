@@ -15,7 +15,7 @@ struct MainPage: View {
     var body: some View {
         TabView{
             VStack{
-                SlidingTabView(selection: $watchIndex, tabs: ["交流检测","直流检测"])
+                SlidingTabView(selection: $watchIndex, tabs: ["交流监测","直流监测"])
                 if watchIndex == 0 {
                     ACWatch()
                 }else{

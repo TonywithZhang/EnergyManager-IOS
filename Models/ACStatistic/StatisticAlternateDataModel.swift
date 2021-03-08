@@ -18,11 +18,9 @@ struct  StatisticAlternateModel : Codable{
     
     var X5: [String] = []
     
-    var Y8: [Int] = []
+    var Y8: [Int]? = []
     
-    var X8: [String] = []
-    
-    var Y82: [Int] = []
+    var X8: [String]? = []
     
     var Y9: [String] = []
     
