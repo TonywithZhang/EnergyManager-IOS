@@ -136,7 +136,7 @@ struct ACWatch: View {
                                     NavigationLink(
                                         destination: PhotoPage(),
                                         label: {
-                                            Text("逆变器")
+                                            Text("逆变器")	    
                                         })
                                 }
                             }
